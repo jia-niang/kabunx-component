@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Schema(title = "简单分页数据")
 public class SimplePagination<T> extends DTO {
     @Schema(title = "是否还有更多", required = true)

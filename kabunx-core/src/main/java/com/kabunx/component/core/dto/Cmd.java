@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
  * Command request from Client.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Cmd extends DTO {
 }

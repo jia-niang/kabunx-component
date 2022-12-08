@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
  * Page Query Param
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Schema(title = "分页查询参数")
 public class PageQuery extends Query {
 
