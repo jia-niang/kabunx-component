@@ -16,9 +16,8 @@ import java.util.Objects;
 })
 public class InterceptorAutoConfiguration {
     @Bean
-    public TraceHandlerInterceptor traceHandlerInterceptor(ApplicationContext applicationContext) {
-        String bizId = Objects.nonNull(applicationContext) ? applicationContext.getApplicationName() : "";
-        return new TraceHandlerInterceptor(bizId);
+    public TraceHandlerInterceptor traceHandlerInterceptor() {
+        return new TraceHandlerInterceptor();
     }
 
     @Bean

@@ -2,4 +2,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.kabunx.component.autoconfigure.web.WebAutoConfiguration,\
   com.kabunx.component.autoconfigure.web.InterceptorAutoConfiguration,\
-  com.kabunx.component.autoconfigure.redis.RedisAutoConfiguration
+  com.kabunx.component.autoconfigure.redis.RedisAutoConfiguration,\
+  com.kabunx.component.autoconfigure.elasticsearch.ElasticsearchAutoConfiguration

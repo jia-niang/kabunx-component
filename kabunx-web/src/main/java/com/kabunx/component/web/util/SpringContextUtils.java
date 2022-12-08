@@ -33,6 +33,10 @@ public class SpringContextUtils implements ApplicationContextAware {
         return applicationContext.getBean(clazz);
     }
 
+    public static String getApplicationName() {
+        return applicationContext.getApplicationName();
+    }
+
     public static String getActiveProfile() {
         return applicationContext.getEnvironment().getActiveProfiles()[0];
     }

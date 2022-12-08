@@ -14,12 +14,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TraceHandlerInterceptor implements HandlerInterceptor {
 
-    private final String bizId;
-
-    public TraceHandlerInterceptor(String bizId) {
-        this.bizId = bizId;
-    }
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String platform = request.getHeader(SecurityConstants.HEADER_CLIENT_ID);
@@ -27,7 +21,6 @@ public class TraceHandlerInterceptor implements HandlerInterceptor {
         TraceUtils.setTraceId(traceId);
         // 追踪上下文
         TraceContext traceContext = new TraceContext();
-        traceContext.setBizId(bizId);
         traceContext.setClientId(platform);
         traceContext.setTraceId(TraceUtils.getTraceId());
         TraceContextHolder.setTrace(traceContext);
