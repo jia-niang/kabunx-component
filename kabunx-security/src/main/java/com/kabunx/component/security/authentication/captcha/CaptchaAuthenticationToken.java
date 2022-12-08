@@ -32,11 +32,9 @@ public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
      * @param captcha     the captcha
      * @param authorities the authorities
      */
-    public CaptchaAuthenticationToken(
-            Object principal,
-            String captcha,
-            Collection<? extends GrantedAuthority> authorities
-    ) {
+    public CaptchaAuthenticationToken(Object principal,
+                                      String captcha,
+                                      Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.captcha = captcha;

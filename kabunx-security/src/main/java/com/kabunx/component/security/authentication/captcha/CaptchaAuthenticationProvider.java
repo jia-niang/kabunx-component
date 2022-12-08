@@ -27,10 +27,7 @@ public class CaptchaAuthenticationProvider implements AuthenticationProvider {
 
     private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    public CaptchaAuthenticationProvider(
-            UserDetailsService userDetailsService,
-            CaptchaService captchaService
-    ) {
+    public CaptchaAuthenticationProvider(UserDetailsService userDetailsService, CaptchaService captchaService) {
         this.userDetailsService = userDetailsService;
         this.captchaService = captchaService;
     }
@@ -71,10 +68,7 @@ public class CaptchaAuthenticationProvider implements AuthenticationProvider {
      * @param user           the user
      * @return the authentication
      */
-    protected Authentication createSuccessAuthentication(
-            Authentication authentication,
-            UserDetails user
-    ) {
+    protected Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
         Collection<? extends GrantedAuthority> authorities = authoritiesMapper.mapAuthorities(user.getAuthorities());
         CaptchaAuthenticationToken authenticationToken = new CaptchaAuthenticationToken(user, null, authorities);
         authenticationToken.setDetails(authentication.getDetails());

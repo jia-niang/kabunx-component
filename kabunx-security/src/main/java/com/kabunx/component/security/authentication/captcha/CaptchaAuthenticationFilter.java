@@ -38,10 +38,7 @@ public class CaptchaAuthenticationFilter extends AbstractAuthenticationProcessin
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    protected void setDetails(
-            HttpServletRequest request,
-            CaptchaAuthenticationToken authRequest
-    ) {
+    protected void setDetails(HttpServletRequest request, CaptchaAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 }

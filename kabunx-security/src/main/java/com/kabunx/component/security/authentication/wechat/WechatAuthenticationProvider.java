@@ -50,10 +50,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         return WechatAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    protected Authentication createSuccessAuthentication(
-            Authentication authentication,
-            UserDetails user
-    ) {
+    protected Authentication createSuccessAuthentication(Authentication authentication, UserDetails user) {
         Collection<? extends GrantedAuthority> authorities = authoritiesMapper.mapAuthorities(user.getAuthorities());
         WechatAuthenticationToken authenticationToken = new WechatAuthenticationToken(user, authorities);
         authenticationToken.setDetails(authentication.getDetails());
