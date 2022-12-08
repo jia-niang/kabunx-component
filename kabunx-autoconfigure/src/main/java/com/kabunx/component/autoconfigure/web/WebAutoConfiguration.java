@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kabunx.component.web.advice.GlobalExceptionAdvice;
 import com.kabunx.component.web.aspect.AdapterLogAspect;
 import com.kabunx.component.web.util.SpringContextUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,6 +13,10 @@ import org.springframework.core.annotation.Order;
 import java.text.SimpleDateFormat;
 
 @Configuration
+@ConditionalOnClass({
+        AdapterLogAspect.class,
+        GlobalExceptionAdvice.class
+})
 public class WebAutoConfiguration {
 
     @Bean
@@ -43,4 +48,5 @@ public class WebAutoConfiguration {
     public SpringContextUtils springContextUtils() {
         return new SpringContextUtils();
     }
+
 }
