@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.kabunx.component.autoconfigure.web.WebAutoConfiguration,\
+  com.kabunx.component.autoconfigure.web.WebMvcConfiguration,\
+  com.kabunx.component.autoconfigure.redis.RedisAutoConfiguration

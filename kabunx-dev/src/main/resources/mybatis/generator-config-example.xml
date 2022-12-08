@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!-- 配置生成器 -->
+<generatorConfiguration>
+    <!--
+        context:生成一组对象的环境
+        id:必选，上下文id，用于在生成错误时提示
+        defaultModelType:指定生成对象的样式
+            1，conditional：类似hierarchical；
+            2，flat：所有内容（主键，blob）等全部生成在一个对象中；
+            3，hierarchical：主键生成一个XXKey对象(key class)，Blob等单独生成一个对象，其他简单属性在一个对象中(record class)
+        targetRuntime:
+            1，MyBatis3：默认的值，生成基于MyBatis3.x以上版本的内容，包括XXXBySample；
+            2，MyBatis3Simple：类似MyBatis3，只是不生成XXXBySample；
+        introspectedColumnImpl：类全限定名，用于扩展MBG -->
+    <context id="mysql" defaultModelType="conditional" targetRuntime="MyBatis3">
+
+        <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；
+            一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖 -->
+        <property name="autoDelimitKeywords" value="false"/>
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!-- 通用插件 -->
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
+        <!-- 覆盖生成XML文件 -->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!-- 此处是将Example改名为Criteria 当然 想改成什么都行~ -->
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Criteria"/>
+        </plugin>
+
+        <commentGenerator type="com.kabunx.component.dev.mybatis.CustomCommentGenerator">
+            <property name="suppressAllComments" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 必须要有的，使用这个配置链接数据库 -->
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/dev_job?characterEncoding=utf8&amp;autoReconnect=true&amp;autoReconnectForPools=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+                userId="root"
+                password="root@123"
+        >
+            <property name="nullCatalogMeansCurrent" value="true"/>
+            <!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
+        </jdbcConnection>
+
+        <!-- 生成实体的位置 -->
+        <javaModelGenerator
+                targetPackage="com.kabunx.job.infra.model"
+                targetProject="src/main/java"
+        >
+            <property name="exampleTargetPackage" value="com.kabunx.job.infra.model.criteria"/>
+            <property name="exampleTargetProject" value="src/main/java"/>
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成 Mapper.xml 的位置 -->
+        <sqlMapGenerator
+                targetPackage="mapper"
+                targetProject="src/main/resources"
+        >
+        </sqlMapGenerator>
+
+        <!-- 生成 Mapper.java 的位置 -->
+        <javaClientGenerator
+                targetPackage="com.kabunx.job.infra.mapper"
+                type="XMLMAPPER"
+                targetProject="src/main/java"
+        >
+        </javaClientGenerator>
+
+        <!-- 设置数据库的表名和实体类名 -->
+        <table tableName="sys_area">
+            <generatedKey column="id" sqlStatement="MySQL" identity="true"/>
+        </table>
+        <table tableName="user">
+            <generatedKey column="id" sqlStatement="MySQL" identity="true"/>
+        </table>
+        <table tableName="cv">
+            <generatedKey column="id" sqlStatement="MySQL" identity="true"/>
+        </table>
+        <table tableName="cv_education">
+            <generatedKey column="id" sqlStatement="MySQL" identity="true"/>
+        </table>
+        <table tableName="cv_work">
+            <generatedKey column="id" sqlStatement="MySQL" identity="true"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>

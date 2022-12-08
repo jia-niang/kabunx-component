@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.kabunx.component</groupId>
+        <artifactId>kabunx-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../kabunx-parent</relativePath>
+    </parent>
+    <artifactId>kabunx-starters</artifactId>
+    <packaging>pom</packaging>
+    <name>kabunx-starters</name>
+    <description>Kabunx Component Starters</description>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>web-spring-boot-starter</module>
+        <module>security-spring-boot-starter</module>
+        <module>redis-spring-boot-starter</module>
+        <module>openfeign-spring-cloud-starter</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kabunx.component</groupId>
+            <artifactId>kabunx-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

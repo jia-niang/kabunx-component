@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kabunx.component</groupId>
+    <artifactId>kabunx-component</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <name>kabunx-component</name>
+    <description>Kabunx Component Project</description>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <revision>1.0.0-SNAPSHOT</revision>
+    </properties>
+
+    <modules>
+        <module>kabunx-dependencies</module>
+        <module>kabunx-parent</module>
+        <module>kabunx-core</module>
+        <module>kabunx-web</module>
+        <module>kabunx-redis</module>
+        <module>kabunx-elasticsearch</module>
+        <module>kabunx-openfeign</module>
+        <module>kabunx-security</module>
+        <module>kabunx-autoconfigure</module>
+        <module>kabunx-starters</module>
+        <module>kabunx-dev</module>
+        <module>kabunx-jwt</module>
+        <module>kabunx-mybatis</module>
+        <module>kabunx-starters/mybatis-spring-boot-starter</module>
+    </modules>
+
+    <!-- Most elements are in profiles, so they are stripped out during maven-flatten -->
+</project>
