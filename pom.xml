@@ -22,7 +22,10 @@
         <module>kabunx-dependencies</module>
         <module>kabunx-parent</module>
         <module>kabunx-common</module>
+        <module>kabunx-jwt</module>
         <module>kabunx-web</module>
+        <module>kabunx-validation</module>
+        <module>kabunx-mybatis</module>
         <module>kabunx-redis</module>
         <module>kabunx-elasticsearch</module>
         <module>kabunx-openfeign</module>
@@ -30,9 +33,6 @@
         <module>kabunx-autoconfigure</module>
         <module>kabunx-starters</module>
         <module>kabunx-dev</module>
-        <module>kabunx-jwt</module>
-        <module>kabunx-mybatis</module>
-        <module>kabunx-starters/mybatis-spring-boot-starter</module>
     </modules>
 
     <!-- Most elements are in profiles, so they are stripped out during maven-flatten -->

@@ -33,7 +33,14 @@ public class CallableUtils {
         callback.accept(value);
     }
 
-    public static void loop(int startHour, int endHour, Supplier<Boolean> supplier) {
+    /**
+     * 每日定时循环任务
+     *
+     * @param startHour 开始时间
+     * @param endHour   结束时间
+     * @param supplier  回调
+     */
+    public static void dailyLoop(int startHour, int endHour, Supplier<Boolean> supplier) {
         // 死循环 监听队列是否有消息需要消费
         for (; ; ) {
             try {
