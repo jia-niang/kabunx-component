@@ -31,7 +31,7 @@ public class CaptchaAuthenticationFilter extends AbstractAuthenticationProcessin
         }
         CaptchaRequest captchaRequest = RequestUtils.getBodyObject(request, CaptchaRequest.class);
         CaptchaAuthenticationToken authRequest = new CaptchaAuthenticationToken(
-                captchaRequest.getPhone(), captchaRequest.getCaptcha()
+                captchaRequest.getPhone(), captchaRequest.getCaptcha(), captchaRequest.getType()
         );
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);

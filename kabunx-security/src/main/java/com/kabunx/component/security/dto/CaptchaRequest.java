@@ -9,4 +9,5 @@ import lombok.EqualsAndHashCode;
 public class CaptchaRequest extends DTO {
     private String phone;
     private String captcha;
+    private String type;
 }

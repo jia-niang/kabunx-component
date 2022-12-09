@@ -12,16 +12,20 @@ public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal;
     private String captcha;
 
+    private String type;
+
     /**
      * 此构造函数用来初始化未授信凭据.
      *
      * @param principal the principal
      * @param captcha   the captcha
+     * @param type      the type
      */
-    public CaptchaAuthenticationToken(Object principal, String captcha) {
+    public CaptchaAuthenticationToken(Object principal, String captcha, String type) {
         super(null);
         this.principal = principal;
         this.captcha = captcha;
+        this.type = type;
         setAuthenticated(false);
     }
 
@@ -50,6 +54,14 @@ public class CaptchaAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return this.principal;
+    }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {

@@ -1,6 +1,6 @@
 package com.kabunx.component.security.authentication.captcha;
 
-import com.kabunx.component.security.service.CaptchaService;
+import com.kabunx.component.security.userdetails.CaptchaUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,7 +12,6 @@ import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
@@ -22,14 +21,13 @@ import java.util.Objects;
 public class CaptchaAuthenticationProvider implements AuthenticationProvider {
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final UserDetailsService userDetailsService;
-    private final CaptchaService captchaService;
+
+    private final CaptchaUserDetailsService captchaUserDetailsService;
 
     private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    public CaptchaAuthenticationProvider(UserDetailsService userDetailsService, CaptchaService captchaService) {
-        this.userDetailsService = userDetailsService;
-        this.captchaService = captchaService;
+    public CaptchaAuthenticationProvider(CaptchaUserDetailsService captchaUserDetailsService) {
+        this.captchaUserDetailsService = captchaUserDetailsService;
     }
 
     @Override
@@ -40,19 +38,13 @@ public class CaptchaAuthenticationProvider implements AuthenticationProvider {
         );
         CaptchaAuthenticationToken unAuthenticationToken = (CaptchaAuthenticationToken) authentication;
         String phone = unAuthenticationToken.getName();
-        String captcha = (String) unAuthenticationToken.getCredentials();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
-        // 此处省略对UserDetails 的可用性 是否过期 是否锁定 是否失效的检验 建议根据实际
-        // 情况添加 或者在 UserDetailsService 的实现中处理
+        String captcha = unAuthenticationToken.getCaptcha();
+        String type = unAuthenticationToken.getType();
+        UserDetails userDetails = captchaUserDetailsService.loadUserByCaptcha(phone, captcha, type);
         if (Objects.isNull(userDetails)) {
             throw new BadCredentialsException("Bad credentials");
         }
-        // 验证码校验
-        if (captchaService.verifyCaptcha(phone, captcha)) {
-            return createSuccessAuthentication(authentication, userDetails);
-        } else {
-            throw new BadCredentialsException("captcha is not matched");
-        }
+        return createSuccessAuthentication(authentication, userDetails);
     }
 
     @Override
