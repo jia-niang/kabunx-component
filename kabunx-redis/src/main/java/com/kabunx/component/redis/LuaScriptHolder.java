@@ -1,6 +1,6 @@
 package com.kabunx.component.redis;
 
-import com.kabunx.component.core.util.IOUtils;
+import com.kabunx.component.common.util.IOUtils;
 import com.kabunx.component.redis.service.impl.LockServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

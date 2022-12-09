@@ -1,8 +1,8 @@
 package com.kabunx.component.mybatis.repository;
 
-import com.kabunx.component.core.dto.Page;
-import com.kabunx.component.core.dto.Pagination;
-import com.kabunx.component.core.dto.SimplePagination;
+import com.kabunx.component.common.dto.Page;
+import com.kabunx.component.common.dto.Pagination;
+import com.kabunx.component.common.dto.SimplePagination;
 import com.kabunx.component.mybatis.example.Example;
 import com.kabunx.component.mybatis.exception.ModelException;
 import com.kabunx.component.mybatis.exception.ModelNotFoundException;

@@ -1,6 +1,6 @@
 package com.kabunx.component.elasticsearch.service.impl;
 
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.elasticsearch.exception.ElasticsearchException;
 import com.kabunx.component.elasticsearch.service.DocumentService;
 import com.kabunx.component.elasticsearch.util.ReflectionUtils;

@@ -1,6 +1,6 @@
 package com.kabunx.component.jwt;
 
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.util.JsonUtils;
 import lombok.Data;
 import org.springframework.util.Assert;
 

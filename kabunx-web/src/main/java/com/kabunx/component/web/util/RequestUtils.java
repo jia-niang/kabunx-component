@@ -1,6 +1,6 @@
 package com.kabunx.component.web.util;
 
-import com.kabunx.component.core.constant.GlobalConstants;
+import com.kabunx.component.common.constant.GlobalConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

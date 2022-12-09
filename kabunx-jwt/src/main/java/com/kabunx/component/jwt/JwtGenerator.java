@@ -1,7 +1,7 @@
 package com.kabunx.component.jwt;
 
-import com.kabunx.component.core.context.AuthContext;
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.context.AuthContext;
+import com.kabunx.component.common.util.JsonUtils;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

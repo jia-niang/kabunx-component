@@ -1,6 +1,6 @@
 package com.kabunx.component.redis.service.impl;
 
-import com.kabunx.component.core.exception.BizException;
+import com.kabunx.component.common.exception.BizException;
 import com.kabunx.component.redis.LuaScriptHolder;
 import com.kabunx.component.redis.service.LockService;
 import org.springframework.data.redis.core.StringRedisTemplate;

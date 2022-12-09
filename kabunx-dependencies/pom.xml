@@ -131,7 +131,7 @@
             <!-- 自定义 -->
             <dependency>
                 <groupId>com.kabunx.component</groupId>
-                <artifactId>kabunx-core</artifactId>
+                <artifactId>kabunx-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

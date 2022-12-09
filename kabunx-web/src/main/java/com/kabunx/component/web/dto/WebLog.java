@@ -1,6 +1,6 @@
 package com.kabunx.component.web.dto;
 
-import com.kabunx.component.core.dto.DTO;
+import com.kabunx.component.common.dto.DTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

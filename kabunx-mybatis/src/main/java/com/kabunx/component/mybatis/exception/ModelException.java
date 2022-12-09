@@ -1,7 +1,7 @@
 package com.kabunx.component.mybatis.exception;
 
-import com.kabunx.component.core.exception.BizException;
-import com.kabunx.component.core.exception.ErrorInfo;
+import com.kabunx.component.common.exception.BizException;
+import com.kabunx.component.common.exception.ErrorInfo;
 
 /**
  * 操作Model的通用异常类

@@ -1,7 +1,7 @@
 package com.kabunx.component.security.web;
 
-import com.kabunx.component.core.dto.RestResponse;
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;

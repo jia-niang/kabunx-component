@@ -1,6 +1,6 @@
 package com.kabunx.component.security.util;
 
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.util.JsonUtils;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package com.kabunx.component.web.advice;
 
-import com.kabunx.component.core.dto.RestResponse;
-import com.kabunx.component.core.exception.BizException;
+import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;

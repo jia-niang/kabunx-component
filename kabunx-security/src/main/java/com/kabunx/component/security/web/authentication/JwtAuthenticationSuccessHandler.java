@@ -1,9 +1,9 @@
 package com.kabunx.component.security.web.authentication;
 
-import com.kabunx.component.core.constant.SecurityConstants;
-import com.kabunx.component.core.context.AuthContext;
-import com.kabunx.component.core.dto.RestResponse;
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.constant.SecurityConstants;
+import com.kabunx.component.common.context.AuthContext;
+import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.jwt.JwtGenerator;
 import com.kabunx.component.security.userdetails.Member;
 import lombok.extern.slf4j.Slf4j;

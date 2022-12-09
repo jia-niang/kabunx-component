@@ -1,9 +1,10 @@
 package com.kabunx.component.web.servlet;
 
-import com.kabunx.component.core.constant.SecurityConstants;
-import com.kabunx.component.core.context.TraceContext;
-import com.kabunx.component.core.context.TraceContextHolder;
-import com.kabunx.component.core.util.TraceUtils;
+
+import com.kabunx.component.common.constant.SecurityConstants;
+import com.kabunx.component.common.context.TraceContext;
+import com.kabunx.component.common.context.TraceContextHolder;
+import com.kabunx.component.common.util.TraceUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

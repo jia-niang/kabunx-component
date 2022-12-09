@@ -1,8 +1,8 @@
 package com.kabunx.component.web.servlet;
 
-import com.kabunx.component.core.constant.SecurityConstants;
-import com.kabunx.component.core.context.AuthContext;
-import com.kabunx.component.core.context.AuthContextHolder;
+import com.kabunx.component.common.constant.SecurityConstants;
+import com.kabunx.component.common.context.AuthContext;
+import com.kabunx.component.common.context.AuthContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

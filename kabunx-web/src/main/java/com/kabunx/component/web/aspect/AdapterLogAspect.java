@@ -1,6 +1,6 @@
 package com.kabunx.component.web.aspect;
 
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.web.dto.WebLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

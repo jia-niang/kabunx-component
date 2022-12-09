@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.kabunx.component</groupId>
-            <artifactId>kabunx-core</artifactId>
+            <artifactId>kabunx-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>

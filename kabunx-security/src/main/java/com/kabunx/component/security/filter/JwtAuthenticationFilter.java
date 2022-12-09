@@ -1,6 +1,6 @@
 package com.kabunx.component.security.filter;
 
-import com.kabunx.component.core.constant.SecurityConstants;
+import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.jwt.JwtGenerator;
 import com.kabunx.component.jwt.JwtPayload;
 import com.kabunx.component.security.userdetails.Member;

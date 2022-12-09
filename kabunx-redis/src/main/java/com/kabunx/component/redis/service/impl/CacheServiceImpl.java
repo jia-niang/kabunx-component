@@ -1,6 +1,6 @@
 package com.kabunx.component.redis.service.impl;
 
-import com.kabunx.component.core.util.JsonUtils;
+import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.redis.constant.enums.CacheTypeEnum;
 import com.kabunx.component.redis.service.CacheService;
 import org.springframework.data.redis.core.StringRedisTemplate;

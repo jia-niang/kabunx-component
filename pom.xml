@@ -21,7 +21,7 @@
     <modules>
         <module>kabunx-dependencies</module>
         <module>kabunx-parent</module>
-        <module>kabunx-core</module>
+        <module>kabunx-common</module>
         <module>kabunx-web</module>
         <module>kabunx-redis</module>
         <module>kabunx-elasticsearch</module>
