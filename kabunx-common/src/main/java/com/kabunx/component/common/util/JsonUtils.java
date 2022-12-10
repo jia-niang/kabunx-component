@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.kabunx.component.common.exception.JsonException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -43,6 +44,11 @@ public class JsonUtils {
             log.error("序列化异常，object is {}", obj);
             throw new JsonException("序列化异常");
         }
+    }
+
+    public static byte[] object2JsonBytes(Object obj) throws JsonException {
+        String json = object2Json(obj);
+        return json.getBytes(StandardCharsets.UTF_8);
     }
 
     public static TypeFactory getTypeFactory() {
