@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.kabunx.component.common.exception.JsonException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,7 @@ import java.util.Map;
 /**
  * json序列化与反序列工具类
  */
+@Slf4j
 public class JsonUtils {
     /**
      * ObjectMapper提供了读取和写入JSON的功能
@@ -38,6 +40,7 @@ public class JsonUtils {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
+            log.error("序列化异常，object is {}", obj);
             throw new JsonException("序列化异常");
         }
     }
@@ -50,6 +53,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, Object.class);
         } catch (Exception e) {
+            log.error("反序列化异常，json is {}", json);
             throw new JsonException("反序列化异常");
         }
     }
@@ -61,6 +65,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, tClass);
         } catch (Exception e) {
+            log.error("反序列化异常，json is {}", json);
             throw new JsonException("反序列化异常");
         }
     }
@@ -72,6 +77,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, typeReference);
         } catch (Exception e) {
+            log.error("反序列化异常，json is {}", json);
             throw new JsonException("反序列化异常");
         }
     }
@@ -84,6 +90,7 @@ public class JsonUtils {
             JavaType javaType = getTypeFactory().constructParametricType(List.class, tClass);
             return objectMapper.readValue(json, javaType);
         } catch (Exception e) {
+            log.error("反序列化异常，json is {}", json);
             throw new JsonException("反序列化异常");
         }
     }
@@ -96,6 +103,7 @@ public class JsonUtils {
             JavaType javaType = getTypeFactory().constructParametricType(Map.class, kClass, vClass);
             return objectMapper.readValue(json, javaType);
         } catch (Exception e) {
+            log.error("反序列化异常，json is {}", json);
             throw new JsonException("反序列化异常");
         }
     }
