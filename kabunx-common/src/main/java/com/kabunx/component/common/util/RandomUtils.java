@@ -1,11 +1,16 @@
 package com.kabunx.component.common.util;
 
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 随机数工具类
  */
 public class RandomUtils {
+
+    public static String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
     /**
      * 按照范围，生成随机的整数
