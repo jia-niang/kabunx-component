@@ -46,10 +46,12 @@
         <dependency>
             <groupId>com.kabunx.component</groupId>
             <artifactId>kabunx-sms</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.kabunx.component</groupId>
             <artifactId>kabunx-email</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

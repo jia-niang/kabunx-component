@@ -191,6 +191,16 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>com.kabunx.component</groupId>
+                <artifactId>sms-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kabunx.component</groupId>
+                <artifactId>email-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-webmvc-core</artifactId>
                 <version>${springdoc.version}</version>
