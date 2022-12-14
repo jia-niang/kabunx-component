@@ -51,12 +51,6 @@ public class ThreadUtils {
      **/
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
 
-
-    /**
-     * 核心线程数
-     */
-    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT;
-
     /**
      * 空闲保活时限，单位秒
      */
@@ -75,8 +69,8 @@ public class ThreadUtils {
 
     private static class CpuThreadPoolLazyHolder {
         private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
-                MAXIMUM_POOL_SIZE,
-                MAXIMUM_POOL_SIZE,
+                CPU_COUNT,
+                CPU_COUNT * 2,
                 KEEP_ALIVE_SECONDS,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
@@ -101,23 +95,18 @@ public class ThreadUtils {
      */
     private static final int IO_CORE = 1;
 
-    /**
-     * IO线程池最大线程数
-     */
-    private static final int IO_MAX = Math.max(2, CPU_COUNT * 2);
-
-
     // 获取执行IO密集型任务的线程池
     public static ThreadPoolExecutor getIoThreadPoolExecutor() {
         return IoThreadPoolLazyHolder.EXECUTOR;
     }
 
-
+    /**
+     * 线程池： 用于IO密集型任务
+     */
     private static class IoThreadPoolLazyHolder {
-        //线程池： 用于IO密集型任务
         private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
                 IO_CORE,
-                IO_MAX,
+                Math.max(2, CPU_COUNT * 2),
                 KEEP_ALIVE_SECONDS,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
@@ -172,7 +161,6 @@ public class ThreadUtils {
         }
     }
 
-
     public static class ShutdownHookThread<T> extends Thread {
         private volatile boolean hasShutdown = false;
         private static final AtomicInteger shutdownTimes = new AtomicInteger(0);
@@ -212,7 +200,6 @@ public class ThreadUtils {
             }
         }
     }
-
 
     /**
      * 优雅关闭线程池
@@ -291,5 +278,4 @@ public class ThreadUtils {
             return t;
         }
     }
-
 }

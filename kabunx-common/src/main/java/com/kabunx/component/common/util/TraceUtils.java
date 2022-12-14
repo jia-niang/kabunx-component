@@ -3,8 +3,6 @@ package com.kabunx.component.common.util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 
-import java.util.UUID;
-
 /**
  * 追踪信息工具类
  */
@@ -17,7 +15,7 @@ public class TraceUtils {
 
     public static void setTraceId(String traceId) {
         if (StringUtils.isBlank(traceId)) {
-            traceId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+            traceId = RandomUtils.uuid().toLowerCase();
         }
         MDC.put(TRACE_ID, traceId);
     }

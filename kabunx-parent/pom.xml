@@ -53,6 +53,16 @@
             </dependency>
             <dependency>
                 <groupId>com.kabunx.component</groupId>
+                <artifactId>kabunx-sms</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kabunx.component</groupId>
+                <artifactId>kabunx-email</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kabunx.component</groupId>
                 <artifactId>kabunx-security</artifactId>
                 <version>${revision}</version>
             </dependency>

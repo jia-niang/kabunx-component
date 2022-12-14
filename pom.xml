@@ -33,6 +33,8 @@
         <module>kabunx-autoconfigure</module>
         <module>kabunx-starters</module>
         <module>kabunx-dev</module>
+        <module>kabunx-sms</module>
+        <module>kabunx-email</module>
     </modules>
 
     <!-- Most elements are in profiles, so they are stripped out during maven-flatten -->
