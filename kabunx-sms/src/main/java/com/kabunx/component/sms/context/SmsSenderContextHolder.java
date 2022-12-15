@@ -13,15 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class SmsSenderContext implements ApplicationContextAware, InitializingBean {
+/**
+ * 各类短信发送器的持有者
+ * 可执行具体的发送
+ */
+public class SmsSenderContextHolder implements ApplicationContextAware, InitializingBean {
     private ApplicationContext applicationContext;
 
     private final Map<String, SmsSender> handlers = new HashMap<>();
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Map<String, SmsSender> handlerMap = applicationContext.getBeansOfType(SmsSender.class);
-        handlerMap.forEach((name, handler) -> handlers.putIfAbsent(handler.getSenderName(), handler));
+        Map<String, SmsSender> senderMap = applicationContext.getBeansOfType(SmsSender.class);
+        senderMap.forEach((name, sender) -> handlers.putIfAbsent(sender.getSenderName(), sender));
     }
 
     @Override
@@ -30,16 +34,22 @@ public class SmsSenderContext implements ApplicationContextAware, InitializingBe
     }
 
     /**
-     * @param name 处理器名称
-     * @return 具体的实现
+     * @param name 发送器名称
+     * @return 具体的发送器
      */
     @Nullable
     public SmsSender getSmsSender(String name) {
         return handlers.get(name);
     }
 
+    /**
+     * 执行某个发送事件
+     *
+     * @param event 发送事件
+     * @throws SmsException 异常
+     */
     public void doSend(SendSmsEvent event) throws SmsException {
-        SmsSender sender = getSmsSender(event.getSenderName());
+        SmsSender sender = getSmsSender(event.getSender().getName());
         if (Objects.isNull(sender)) {
             throw new SmsException("未定义该类型短息发送器");
         }

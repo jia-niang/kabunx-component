@@ -3,7 +3,7 @@ package com.kabunx.component.autoconfigure.sms;
 import com.kabunx.component.sms.SmsSender;
 import com.kabunx.component.sms.aliyun.AliyunSmsConfig;
 import com.kabunx.component.sms.aliyun.AliyunSmsSender;
-import com.kabunx.component.sms.context.SmsSenderContext;
+import com.kabunx.component.sms.context.SmsSenderContextHolder;
 import com.kabunx.component.sms.mon.MonSmsConfig;
 import com.kabunx.component.sms.mon.MonSmsSender;
 import com.kabunx.component.sms.tencent.TencentSmsConfig;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnClass(SmsSenderContext.class)
+@ConditionalOnClass(SmsSenderContextHolder.class)
 @EnableConfigurationProperties(SmsProperties.class)
 public class SmsAutoConfiguration {
 
@@ -25,8 +25,8 @@ public class SmsAutoConfiguration {
     }
 
     @Bean
-    SmsSenderContext smsSenderContext() {
-        return new SmsSenderContext();
+    SmsSenderContextHolder smsSenderContextHolder() {
+        return new SmsSenderContextHolder();
     }
 
     @Bean("aliyunSmsSender")

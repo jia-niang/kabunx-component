@@ -1,6 +1,7 @@
 package com.kabunx.component.sms.dto;
 
 import com.kabunx.component.common.dto.Event;
+import com.kabunx.component.sms.enums.SenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class SendSmsEvent extends Event {
 
     @Schema(title = "谁来发送短信")
-    private String senderName;
+    private SenderEnum sender;
 
     @Schema(title = "接收短信的手机号码")
     private String phone;
