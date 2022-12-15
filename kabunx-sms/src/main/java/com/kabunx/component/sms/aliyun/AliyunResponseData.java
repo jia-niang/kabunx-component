@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 @Data
 public class AliyunResponseData implements Serializable {
-    private static final String OK = "OK";
 
     @JsonProperty("Message")
     private String message;
@@ -19,6 +18,6 @@ public class AliyunResponseData implements Serializable {
     private String code;
 
     public boolean success() {
-        return OK.equals(code);
+        return "OK".equals(code);
     }
 }

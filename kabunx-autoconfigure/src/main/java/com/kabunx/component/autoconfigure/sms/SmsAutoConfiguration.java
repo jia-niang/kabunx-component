@@ -4,6 +4,7 @@ import com.kabunx.component.sms.SmsSender;
 import com.kabunx.component.sms.aliyun.AliyunSmsConfig;
 import com.kabunx.component.sms.aliyun.AliyunSmsSender;
 import com.kabunx.component.sms.context.SmsSenderContext;
+import com.kabunx.component.sms.mon.MonSmsConfig;
 import com.kabunx.component.sms.mon.MonSmsSender;
 import com.kabunx.component.sms.tencent.TencentSmsConfig;
 import com.kabunx.component.sms.tencent.TencentSmsSender;
@@ -43,7 +44,7 @@ public class SmsAutoConfiguration {
     @Bean("monSmsSender")
     @ConditionalOnClass(MonSmsSender.class)
     SmsSender monSmsSender() {
-        return new MonSmsSender(smsConfig);
+        return new MonSmsSender(monSmsConfig(smsProperties.getMon()));
     }
 
 
@@ -63,6 +64,15 @@ public class SmsAutoConfiguration {
         TencentSmsConfig config = new TencentSmsConfig();
         config.setSecretId(tencent.getSecretId());
         config.setSecretKey(tencent.getSecretKey());
+        return config;
+    }
+
+    private MonSmsConfig monSmsConfig(SmsProperties.Mon mon) {
+        MonSmsConfig config = new MonSmsConfig();
+        config.setUserId(config.getUserId());
+        config.setPwd(config.getPwd());
+        config.setKey(config.getKey());
+        config.setUrls(mon.getUrls());
         return config;
     }
 

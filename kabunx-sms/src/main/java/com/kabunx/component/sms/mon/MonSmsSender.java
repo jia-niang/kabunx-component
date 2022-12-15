@@ -35,9 +35,8 @@ public class MonSmsSender implements SmsSender {
                 MonResponse response = JsonUtils.json2Object(s, MonResponse.class);
                 response.doLog();
             });
-            log.info("梦网短信发送");
         } catch (Exception ex) {
-            log.error("梦网短信发送发送失败", ex);
+            log.error("梦网短信发送失败", ex);
         }
     }
 

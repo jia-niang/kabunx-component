@@ -1,6 +1,11 @@
 package com.kabunx.component.sms.mon;
 
-public class SingleMessage {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class SingleMessage implements Serializable {
     // 短信接收的手机号
     private String mobile;
 

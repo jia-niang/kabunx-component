@@ -19,7 +19,7 @@ public class MonResponse implements Serializable {
         ERRORS.put(-100001, "鉴权未通过");
         ERRORS.put(-100002, "多次鉴权未通过");
         ERRORS.put(-100003, "用户欠费");
-        ERRORS.put(-100004, "custid或exdata字段不合法");
+        ERRORS.put(-100004, "自定义字段不合法");
         ERRORS.put(-100011, "短信内容超长");
         ERRORS.put(-100012, "手机号码不合法");
         ERRORS.put(-100014, "手机号码超过最大支持数量（1000）");

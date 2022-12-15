@@ -3,6 +3,8 @@ package com.kabunx.component.autoconfigure.sms;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 @Data
 @ConfigurationProperties(prefix = SmsProperties.PREFIX, ignoreInvalidFields = true)
 public class SmsProperties {
@@ -50,6 +52,10 @@ public class SmsProperties {
          */
         private Boolean enabled;
         /**
+         * API支持的地域ID，比如：cn-hangzhou
+         */
+        private String regionId;
+        /**
          * API 调用者的身份
          */
         private String secretId;
@@ -78,5 +84,7 @@ public class SmsProperties {
          * 用户唯一标识，32位长度，如存在uid/pwd可不填
          */
         private String key;
+
+        private List<String> urls;
     }
 }
