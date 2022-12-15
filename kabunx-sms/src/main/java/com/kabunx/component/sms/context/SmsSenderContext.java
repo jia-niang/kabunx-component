@@ -1,7 +1,7 @@
 package com.kabunx.component.sms.context;
 
 import com.kabunx.component.sms.SmsSender;
-import com.kabunx.component.sms.dto.SmsSendEvent;
+import com.kabunx.component.sms.dto.SendSmsEvent;
 import com.kabunx.component.sms.exception.SmsException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -38,7 +38,7 @@ public class SmsSenderContext implements ApplicationContextAware, InitializingBe
         return handlers.get(name);
     }
 
-    public void doSend(SmsSendEvent event) throws SmsException {
+    public void doSend(SendSmsEvent event) throws SmsException {
         SmsSender sender = getSmsSender(event.getSenderName());
         if (Objects.isNull(sender)) {
             throw new SmsException("未定义该类型短息发送器");
