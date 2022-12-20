@@ -7,4 +7,6 @@ public interface SmsSender {
     String getSenderName();
 
     void doSend(SendSmsEvent sendSmsEvent);
+
+
 }

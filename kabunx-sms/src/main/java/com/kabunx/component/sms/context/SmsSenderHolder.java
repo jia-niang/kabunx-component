@@ -17,7 +17,7 @@ import java.util.Objects;
  * 各类短信发送器的持有者
  * 可执行具体的发送
  */
-public class SmsSenderContextHolder implements ApplicationContextAware, InitializingBean {
+public class SmsSenderHolder implements ApplicationContextAware, InitializingBean {
     private ApplicationContext applicationContext;
 
     private final Map<String, SmsSender> handlers = new HashMap<>();

@@ -24,13 +24,13 @@
             <artifactId>kabunx-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
+            <groupId>com.kabunx.component</groupId>
+            <artifactId>kabunx-jwt</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.kabunx.component</groupId>
-            <artifactId>kabunx-jwt</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -39,8 +39,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

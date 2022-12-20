@@ -2,6 +2,7 @@ package com.kabunx.component.common.dto;
 
 import com.kabunx.component.common.exception.BizErrorInfo;
 import com.kabunx.component.common.exception.ErrorInfo;
+import com.kabunx.component.common.util.JsonUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -102,5 +103,13 @@ public class RestResponse<T> {
 
     public static <T> RestResponse<T> failure(ErrorInfo error) {
         return failure(error.getCode(), error.getMessage());
+    }
+
+    public String toJson() {
+        return JsonUtils.object2Json(this);
+    }
+
+    public byte[] toJsonBytes() {
+        return JsonUtils.object2JsonBytes(this);
     }
 }

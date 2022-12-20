@@ -4,19 +4,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kabunx.component.web.advice.GlobalExceptionAdvice;
 import com.kabunx.component.web.aspect.AdapterLogAspect;
-import com.kabunx.component.web.util.SpringContextUtils;
+import com.kabunx.component.web.context.SpringContextWrapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import java.text.SimpleDateFormat;
 
 @Configuration
-@ConditionalOnClass({
-        AdapterLogAspect.class,
-        GlobalExceptionAdvice.class
-})
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class WebAutoConfiguration {
 
     @Bean
@@ -31,7 +28,7 @@ public class WebAutoConfiguration {
      * @return 适配层日志拦截器
      */
     @Bean
-    @Order(1)
+    @ConditionalOnClass(com.kabunx.component.web.aspect.AdapterLogAspect.class)
     public AdapterLogAspect adapterLogAspect() {
         return new AdapterLogAspect();
     }
@@ -40,13 +37,15 @@ public class WebAutoConfiguration {
      * @return 全局异常捕获拦截器
      */
     @Bean
+    @ConditionalOnClass(com.kabunx.component.web.advice.GlobalExceptionAdvice.class)
     public GlobalExceptionAdvice globalExceptionAdvice() {
         return new GlobalExceptionAdvice();
     }
 
     @Bean
-    public SpringContextUtils springContextUtils() {
-        return new SpringContextUtils();
+    @ConditionalOnClass(com.kabunx.component.web.context.SpringContextWrapper.class)
+    public SpringContextWrapper springContextUtils() {
+        return new SpringContextWrapper();
     }
 
 }

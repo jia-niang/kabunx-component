@@ -3,13 +3,11 @@ package com.kabunx.component.jwt;
 import lombok.Data;
 
 @Data
-public class JwtProperties {
-    public static final String JWT_PREFIX = "security.jwt";
+public class JwtConfig {
+    public static final String DEFAULT_ISS = "kabunx";
+    public static final String DEFAULT_SUB = "web";
 
-    private static final String DEFAULT_ISS = "kabunx";
-    private static final String DEFAULT_SUB = "web";
-
-    private static final Integer ACCESS_EXP_DAYS = 30;
+    public static final Integer ACCESS_EXP_DAYS = 30;
 
     /**
      * 是否可用

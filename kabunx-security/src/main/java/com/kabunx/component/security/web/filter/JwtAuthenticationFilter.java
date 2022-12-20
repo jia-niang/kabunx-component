@@ -1,4 +1,4 @@
-package com.kabunx.component.security.filter;
+package com.kabunx.component.security.web.filter;
 
 import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.jwt.JwtGenerator;

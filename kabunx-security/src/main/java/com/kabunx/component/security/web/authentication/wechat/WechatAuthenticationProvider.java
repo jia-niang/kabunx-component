@@ -1,4 +1,4 @@
-package com.kabunx.component.security.authentication.wechat;
+package com.kabunx.component.security.web.authentication.wechat;
 
 import com.kabunx.component.security.userdetails.WechatUserDetailsService;
 import org.springframework.context.support.MessageSourceAccessor;

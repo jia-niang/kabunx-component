@@ -13,7 +13,7 @@ import java.util.List;
  * 并没有具体实现，可用于测试
  */
 @Slf4j
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class DefaultUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

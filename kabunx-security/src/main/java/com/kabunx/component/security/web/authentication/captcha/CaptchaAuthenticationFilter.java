@@ -1,4 +1,4 @@
-package com.kabunx.component.security.authentication.captcha;
+package com.kabunx.component.security.web.authentication.captcha;
 
 import com.kabunx.component.security.dto.CaptchaRequest;
 import com.kabunx.component.security.util.RequestUtils;

@@ -9,6 +9,9 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * 缓存操作
+ */
 public class CacheServiceImpl implements CacheService {
     private final StringRedisTemplate stringRedisTemplate;
 
@@ -60,7 +63,7 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Override
-    public <T> T remember(String key, Supplier<T> supplier, Class<T> tClass) {
+    public <T> T forever(String key, Supplier<T> supplier, Class<T> tClass) {
         T data = get(key, tClass);
         if (Objects.nonNull(data)) {
             return data;

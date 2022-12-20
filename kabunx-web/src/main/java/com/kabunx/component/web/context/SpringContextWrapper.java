@@ -1,10 +1,10 @@
-package com.kabunx.component.web.util;
+package com.kabunx.component.web.context;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-public class SpringContextUtils implements ApplicationContextAware {
+public class SpringContextWrapper implements ApplicationContextAware {
     public static final String DEV_PROFILE = "dev";
     public static final String TEST_PROFILE = "test";
     public static final String PROD_PROFILE = "prod";
@@ -15,7 +15,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextUtils.applicationContext = applicationContext;
+        SpringContextWrapper.applicationContext = applicationContext;
     }
 
     /**

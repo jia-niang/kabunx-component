@@ -1,4 +1,4 @@
-package com.kabunx.component.security.authentication.wechat;
+package com.kabunx.component.security.web.authentication.wechat;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

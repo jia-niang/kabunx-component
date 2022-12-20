@@ -3,7 +3,6 @@ package com.kabunx.component.redis.service;
 
 import com.kabunx.component.redis.constant.enums.CacheTypeEnum;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface CacheService {
@@ -22,7 +21,7 @@ public interface CacheService {
 
     <T> T remember(String key, Supplier<T> supplier, int timeout, Class<T> tClass);
 
-    <T> T remember(String key, Supplier<T> supplier, Class<T> tClass);
+    <T> T forever(String key, Supplier<T> supplier, Class<T> tClass);
 
     void del(String key);
 

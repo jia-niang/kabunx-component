@@ -1,9 +1,7 @@
-package com.kabunx.component.security.authentication.wechat;
+package com.kabunx.component.security.web.authentication.wechat;
 
-import com.kabunx.component.security.dto.CaptchaRequest;
 import com.kabunx.component.security.dto.WechatRequest;
 import com.kabunx.component.security.util.RequestUtils;
-import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

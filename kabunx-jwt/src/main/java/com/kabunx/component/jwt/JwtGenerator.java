@@ -19,12 +19,12 @@ import java.util.Objects;
 public class JwtGenerator {
     private static final String MAC_SECRET = "1234567890QwertyuiopAsdfghklZxcvbnm";
 
-    private final JwtProperties jwtProperties;
+    private final JwtConfig jwtConfig;
 
     private final JWSHeader jwsHeader;
 
-    public JwtGenerator(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
+    public JwtGenerator(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
         // 创建JWS头，设置签名算法和类型
         this.jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256)
                 .type(JOSEObjectType.JWT)
@@ -36,13 +36,13 @@ public class JwtGenerator {
             log.error("签名信息不能为Null");
         }
         JwtPayload jwtPayload = new JwtPayload();
-        jwtPayload.setSub(jwtProperties.getSub());
-        jwtPayload.setIss(jwtProperties.getIss());
+        jwtPayload.setSub(jwtConfig.getSub());
+        jwtPayload.setIss(jwtConfig.getIss());
         jwtPayload.setAud(String.valueOf(authContext.getId()));
         jwtPayload.setType(authContext.getType());
         jwtPayload.setUsername(authContext.getUsername());
         jwtPayload.setAuthorities(authContext.getAuthorities());
-        String body = jwtPayload.toPayloadString(jwtProperties.getAccessExpDays());
+        String body = jwtPayload.toPayloadString(jwtConfig.getAccessExpDays());
         try {
             //创建JWS对象
             JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(body));
