@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kabunx.component.web.advice.GlobalExceptionAdvice;
 import com.kabunx.component.web.aspect.AdapterLogAspect;
-import com.kabunx.component.web.context.SpringContextWrapper;
+import com.kabunx.component.web.context.SpringContextHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -43,9 +43,9 @@ public class WebAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(com.kabunx.component.web.context.SpringContextWrapper.class)
-    public SpringContextWrapper springContextUtils() {
-        return new SpringContextWrapper();
+    @ConditionalOnClass(SpringContextHolder.class)
+    public SpringContextHolder springContextUtils() {
+        return new SpringContextHolder();
     }
 
 }

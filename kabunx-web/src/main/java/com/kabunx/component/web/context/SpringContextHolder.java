@@ -4,7 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-public class SpringContextWrapper implements ApplicationContextAware {
+public class SpringContextHolder implements ApplicationContextAware {
     public static final String DEV_PROFILE = "dev";
     public static final String TEST_PROFILE = "test";
     public static final String PROD_PROFILE = "prod";
@@ -15,7 +15,7 @@ public class SpringContextWrapper implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextWrapper.applicationContext = applicationContext;
+        SpringContextHolder.applicationContext = applicationContext;
     }
 
     /**
