@@ -2,7 +2,7 @@ package com.kabunx.component.log.parser;
 
 import com.kabunx.component.log.context.FunctionTemplateHolder;
 import com.kabunx.component.log.dto.MethodExecuteResult;
-import com.kabunx.component.log.context.expression.LogRecordExpressionEvaluator;
+import com.kabunx.component.log.context.expression.OperationLogExpressionEvaluator;
 import com.kabunx.component.log.util.DiffUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -18,15 +18,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LogRecordTemplateParser extends FunctionTemplateParser implements BeanFactoryAware {
+public class LogTemplateParser extends FunctionTemplateParser implements BeanFactoryAware {
 
     private static final Pattern pattern = Pattern.compile("\\{\\s*(\\w*)\\s*\\{(.*?)}}");
     public static final String COMMA = ",";
     protected BeanFactory beanFactory;
 
-    private final LogRecordExpressionEvaluator expressionEvaluator = new LogRecordExpressionEvaluator();
+    private final OperationLogExpressionEvaluator expressionEvaluator = new OperationLogExpressionEvaluator();
 
-    public LogRecordTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
+    public LogTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
         super(functionTemplateHolder);
     }
 

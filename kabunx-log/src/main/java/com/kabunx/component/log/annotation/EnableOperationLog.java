@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface EnableLogRecord {
+public @interface EnableOperationLog {
 
     String basePackage() default "com.kabunx";
 

@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface LogRecord {
+public @interface OperationLog {
     /**
      * 操作日志的文本模板
      *

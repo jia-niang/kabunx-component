@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LogRecordExpressionEvaluator extends CachedExpressionEvaluator {
+public class OperationLogExpressionEvaluator extends CachedExpressionEvaluator {
     private final Map<AnnotatedElementKey, Method> targetMethodCache = new ConcurrentHashMap<>(64);
     private final Map<ExpressionKey, Expression> expressionCache = new ConcurrentHashMap<>(64);
 
@@ -34,7 +34,7 @@ public class LogRecordExpressionEvaluator extends CachedExpressionEvaluator {
     public EvaluationContext createEvaluationContext(Method method, Object[] args, Class<?> targetClass,
                                                      Object result, String errorMsg, BeanFactory beanFactory) {
         Method targetMethod = getTargetMethod(targetClass, method);
-        LogRecordEvaluationContext evaluationContext = new LogRecordEvaluationContext(
+        OperationLogEvaluationContext evaluationContext = new OperationLogEvaluationContext(
                 null, targetMethod, args, getParameterNameDiscoverer(), result, errorMsg);
         if (beanFactory != null) {
             evaluationContext.setBeanResolver(new BeanFactoryResolver(beanFactory));

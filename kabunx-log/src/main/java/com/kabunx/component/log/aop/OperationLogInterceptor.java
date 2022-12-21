@@ -1,14 +1,14 @@
 package com.kabunx.component.log.aop;
 
 import com.kabunx.component.log.dto.CodeVariableType;
-import com.kabunx.component.log.LogRecordMonitor;
-import com.kabunx.component.log.parser.LogRecordParser;
+import com.kabunx.component.log.OperationLogMonitor;
+import com.kabunx.component.log.parser.OperationLogParser;
 import com.kabunx.component.log.dto.MethodExecuteResult;
-import com.kabunx.component.log.context.LogRecordContext;
-import com.kabunx.component.log.dto.LogRecordEntity;
-import com.kabunx.component.log.dto.LogRecordOperation;
-import com.kabunx.component.log.parser.LogRecordTemplateParser;
-import com.kabunx.component.log.service.LogRecordService;
+import com.kabunx.component.log.context.OperationLogContext;
+import com.kabunx.component.log.dto.OperationLogEntity;
+import com.kabunx.component.log.dto.OperationLogMetadata;
+import com.kabunx.component.log.parser.LogTemplateParser;
+import com.kabunx.component.log.service.OperationLogService;
 import com.kabunx.component.log.service.OperatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -23,26 +23,26 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @Slf4j
-public class LogRecordInterceptor implements MethodInterceptor {
+public class OperationLogInterceptor implements MethodInterceptor {
 
-    private final LogRecordParser logRecordParser = new LogRecordParser();
+    private final OperationLogParser operationLogParser = new OperationLogParser();
 
-    private final LogRecordTemplateParser logRecordTemplateParser;
+    private final LogTemplateParser logTemplateParser;
 
-    private final LogRecordService logRecordService;
+    private final OperationLogService operationLogService;
 
-    private final OperatorService operatorGetService;
+    private final OperatorService operatorService;
 
-    private String tenantId;
+    private String tenantName;
 
     private boolean joinTransaction;
 
-    public LogRecordInterceptor(LogRecordTemplateParser logRecordTemplateParser,
-                                LogRecordService logRecordService,
-                                OperatorService operatorGetService) {
-        this.logRecordTemplateParser = logRecordTemplateParser;
-        this.logRecordService = logRecordService;
-        this.operatorGetService = operatorGetService;
+    public OperationLogInterceptor(LogTemplateParser logTemplateParser,
+                                   OperationLogService operationLogService,
+                                   OperatorService operatorService) {
+        this.logTemplateParser = logTemplateParser;
+        this.operationLogService = operationLogService;
+        this.operatorService = operatorService;
     }
 
     @Override
@@ -57,18 +57,18 @@ public class LogRecordInterceptor implements MethodInterceptor {
             return invoker.proceed();
         }
         // 性能监控
-        StopWatch stopWatch = new StopWatch(LogRecordMonitor.MONITOR_NAME);
-        stopWatch.start(LogRecordMonitor.MONITOR_TASK_BEFORE_EXECUTE);
+        StopWatch stopWatch = new StopWatch(OperationLogMonitor.MONITOR_NAME);
+        stopWatch.start(OperationLogMonitor.MONITOR_TASK_BEFORE_EXECUTE);
         Class<?> targetClass = getTargetClass(target);
         Object result = null;
         MethodExecuteResult methodExecuteResult = new MethodExecuteResult(method, args, targetClass);
-        LogRecordContext.empty();
-        Collection<LogRecordOperation> operations = new ArrayList<>();
+        OperationLogContext.empty();
+        Collection<OperationLogMetadata> operations = new ArrayList<>();
         Map<String, String> functionNameAndReturnMap = new HashMap<>();
         try {
-            operations = logRecordParser.buildLogRecordOperations(method, targetClass);
+            operations = operationLogParser.buildLogRecordOperations(method, targetClass);
             List<String> spElTemplates = getBeforeExecuteFunctionTemplate(operations);
-            functionNameAndReturnMap = logRecordTemplateParser.processBeforeExecuteFunctionTemplate(spElTemplates, targetClass, method, args);
+            functionNameAndReturnMap = logTemplateParser.processBeforeExecuteFunctionTemplate(spElTemplates, targetClass, method, args);
         } catch (Exception e) {
             log.error("log record parse before function exception", e);
         } finally {
@@ -84,28 +84,28 @@ public class LogRecordInterceptor implements MethodInterceptor {
             methodExecuteResult.setThrowable(e);
             methodExecuteResult.setErrorMsg(e.getMessage());
         }
-        stopWatch.start(LogRecordMonitor.MONITOR_TASK_AFTER_EXECUTE);
+        stopWatch.start(OperationLogMonitor.MONITOR_TASK_AFTER_EXECUTE);
         try {
             if (!CollectionUtils.isEmpty(operations)) {
-                recordExecute(methodExecuteResult, functionNameAndReturnMap, operations);
+                logExecute(methodExecuteResult, functionNameAndReturnMap, operations);
             }
         } catch (Exception t) {
             log.error("log record parse exception", t);
             throw t;
         } finally {
-            LogRecordContext.clear();
+            OperationLogContext.clear();
             stopWatch.stop();
             log.info(stopWatch.toString());
         }
-        if (methodExecuteResult.getThrowable() != null) {
+        if (Objects.nonNull(methodExecuteResult.getThrowable())) {
             throw methodExecuteResult.getThrowable();
         }
         return result;
     }
 
-    private List<String> getBeforeExecuteFunctionTemplate(Collection<LogRecordOperation> operations) {
+    private List<String> getBeforeExecuteFunctionTemplate(Collection<OperationLogMetadata> operations) {
         List<String> spElTemplates = new ArrayList<>();
-        for (LogRecordOperation operation : operations) {
+        for (OperationLogMetadata operation : operations) {
             // 执行之前的函数，失败模版不解析
             List<String> templates = getSpElTemplates(operation, operation.getSuccessTemplate());
             if (!CollectionUtils.isEmpty(templates)) {
@@ -115,10 +115,10 @@ public class LogRecordInterceptor implements MethodInterceptor {
         return spElTemplates;
     }
 
-    private void recordExecute(MethodExecuteResult methodExecuteResult,
-                               Map<String, String> functionNameAndReturnMap,
-                               Collection<LogRecordOperation> operations) {
-        for (LogRecordOperation operation : operations) {
+    private void logExecute(MethodExecuteResult methodExecuteResult,
+                            Map<String, String> functionNameAndReturnMap,
+                            Collection<OperationLogMetadata> operations) {
+        for (OperationLogMetadata operation : operations) {
             try {
                 if (StringUtils.isEmpty(operation.getSuccessTemplate()) && StringUtils.isEmpty(operation.getFailTemplate())) {
                     continue;
@@ -127,9 +127,9 @@ public class LogRecordInterceptor implements MethodInterceptor {
                     continue;
                 }
                 if (!methodExecuteResult.isSuccess()) {
-                    failRecordExecute(methodExecuteResult, functionNameAndReturnMap, operation);
+                    failLogExecute(methodExecuteResult, functionNameAndReturnMap, operation);
                 } else {
-                    successRecordExecute(methodExecuteResult, functionNameAndReturnMap, operation);
+                    successLogExecute(methodExecuteResult, functionNameAndReturnMap, operation);
                 }
             } catch (Exception t) {
                 log.error("log record execute exception", t);
@@ -140,14 +140,14 @@ public class LogRecordInterceptor implements MethodInterceptor {
         }
     }
 
-    private void successRecordExecute(MethodExecuteResult methodExecuteResult,
-                                      Map<String, String> functionNameAndReturnMap,
-                                      LogRecordOperation operation) {
+    private void successLogExecute(MethodExecuteResult methodExecuteResult,
+                                   Map<String, String> functionNameAndReturnMap,
+                                   OperationLogMetadata operation) {
         // 若存在 success 条件模版，解析出成功/失败的模版
         String detail;
         boolean flag = true;
         if (!StringUtils.isEmpty(operation.getSuccess())) {
-            String condition = logRecordTemplateParser.singleProcessTemplate(methodExecuteResult, operation.getSuccess(), functionNameAndReturnMap);
+            String condition = logTemplateParser.singleProcessTemplate(methodExecuteResult, operation.getSuccess(), functionNameAndReturnMap);
             if (StringUtils.endsWithIgnoreCase(condition, "true")) {
                 detail = operation.getSuccessTemplate();
             } else {
@@ -162,13 +162,13 @@ public class LogRecordInterceptor implements MethodInterceptor {
             return;
         }
         List<String> spElTemplates = getSpElTemplates(operation, detail);
-        String operatorIdFromService = getOperatorFromServiceAndPutTemplate(operation, spElTemplates);
-        Map<String, String> expressionValues = logRecordTemplateParser.processTemplate(spElTemplates, methodExecuteResult, functionNameAndReturnMap);
-        saveLog(methodExecuteResult.getMethod(), !flag, operation, operatorIdFromService, detail, expressionValues);
+        String operator = getOperatorFromServiceAndPutTemplate(operation, spElTemplates);
+        Map<String, String> expressionValues = logTemplateParser.processTemplate(spElTemplates, methodExecuteResult, functionNameAndReturnMap);
+        saveLog(methodExecuteResult.getMethod(), !flag, operation, operator, detail, expressionValues);
     }
 
-    private void failRecordExecute(MethodExecuteResult methodExecuteResult, Map<String, String> functionNameAndReturnMap,
-                                   LogRecordOperation operation) {
+    private void failLogExecute(MethodExecuteResult methodExecuteResult, Map<String, String> functionNameAndReturnMap,
+                                OperationLogMetadata operation) {
         if (StringUtils.isEmpty(operation.getFailTemplate())) {
             return;
         }
@@ -176,21 +176,21 @@ public class LogRecordInterceptor implements MethodInterceptor {
         List<String> spElTemplates = getSpElTemplates(operation, detail);
         String operatorIdFromService = getOperatorFromServiceAndPutTemplate(operation, spElTemplates);
 
-        Map<String, String> expressionValues = logRecordTemplateParser.processTemplate(spElTemplates, methodExecuteResult, functionNameAndReturnMap);
+        Map<String, String> expressionValues = logTemplateParser.processTemplate(spElTemplates, methodExecuteResult, functionNameAndReturnMap);
         saveLog(methodExecuteResult.getMethod(), true, operation, operatorIdFromService, detail, expressionValues);
     }
 
     private boolean exitsCondition(MethodExecuteResult methodExecuteResult,
                                    Map<String, String> functionNameAndReturnMap,
-                                   LogRecordOperation operation) {
+                                   OperationLogMetadata operation) {
         if (!StringUtils.isEmpty(operation.getCondition())) {
-            String condition = logRecordTemplateParser.singleProcessTemplate(methodExecuteResult, operation.getCondition(), functionNameAndReturnMap);
+            String condition = logTemplateParser.singleProcessTemplate(methodExecuteResult, operation.getCondition(), functionNameAndReturnMap);
             return StringUtils.endsWithIgnoreCase(condition, "false");
         }
         return false;
     }
 
-    private void saveLog(Method method, boolean flag, LogRecordOperation operation, String operatorIdFromService,
+    private void saveLog(Method method, boolean flag, OperationLogMetadata operation, String operatorIdFromService,
                          String detail, Map<String, String> expressionValues) {
         if (StringUtils.isEmpty(expressionValues.get(detail))) {
             return;
@@ -198,8 +198,8 @@ public class LogRecordInterceptor implements MethodInterceptor {
         if (Objects.equals(detail, expressionValues.get(detail))) {
             log.warn("模板没有被解析！");
         }
-        LogRecordEntity logRecordEntity = LogRecordEntity.builder()
-                .tenant(tenantId)
+        OperationLogEntity operationLogEntity = OperationLogEntity.builder()
+                .tenantName(tenantName)
                 .type(expressionValues.get(operation.getType()))
                 .bizNo(expressionValues.get(operation.getBizNo()))
                 .operator(getRealOperatorId(operation, operatorIdFromService, expressionValues))
@@ -207,11 +207,12 @@ public class LogRecordInterceptor implements MethodInterceptor {
                 .extra(expressionValues.get(operation.getExtra()))
                 .codeVariable(getCodeVariable(method))
                 .detail(expressionValues.get(detail))
+                .count(1) // TODO 替换为实际值
                 .fail(flag)
                 .createTime(new Date())
                 .build();
         // 保存
-        logRecordService.save(logRecordEntity);
+        operationLogService.save(operationLogEntity);
     }
 
     private Map<CodeVariableType, Object> getCodeVariable(Method method) {
@@ -221,7 +222,7 @@ public class LogRecordInterceptor implements MethodInterceptor {
         return map;
     }
 
-    private List<String> getSpElTemplates(LogRecordOperation operation, String... actions) {
+    private List<String> getSpElTemplates(OperationLogMetadata operation, String... actions) {
         List<String> spElTemplates = new ArrayList<>();
         spElTemplates.add(operation.getType());
         spElTemplates.add(operation.getBizNo());
@@ -231,14 +232,14 @@ public class LogRecordInterceptor implements MethodInterceptor {
         return spElTemplates;
     }
 
-    private String getRealOperatorId(LogRecordOperation operation, String operatorIdFromService, Map<String, String> expressionValues) {
-        return !StringUtils.isEmpty(operatorIdFromService) ? operatorIdFromService : expressionValues.get(operation.getOperator());
+    private String getRealOperatorId(OperationLogMetadata operation, String operator, Map<String, String> expressionValues) {
+        return !StringUtils.isEmpty(operator) ? operator : expressionValues.get(operation.getOperator());
     }
 
-    private String getOperatorFromServiceAndPutTemplate(LogRecordOperation operation, List<String> spElTemplates) {
+    private String getOperatorFromServiceAndPutTemplate(OperationLogMetadata operation, List<String> spElTemplates) {
         String realOperator = "";
         if (StringUtils.isEmpty(operation.getOperator())) {
-            realOperator = operatorGetService.getCurrentAuth().getUsername();
+            realOperator = operatorService.getCurrentAuth().getUsername();
             if (StringUtils.isEmpty(realOperator)) {
                 throw new IllegalArgumentException("[LogRecord] operator is null");
             }
@@ -252,8 +253,8 @@ public class LogRecordInterceptor implements MethodInterceptor {
         return AopProxyUtils.ultimateTargetClass(target);
     }
 
-    public void setTenant(String tenant) {
-        this.tenantId = tenant;
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 
     public void setJoinTransaction(boolean joinTransaction) {

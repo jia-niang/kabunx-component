@@ -1,7 +1,7 @@
 package com.kabunx.component.log.parser;
 
-import com.kabunx.component.log.annotation.LogRecord;
-import com.kabunx.component.log.dto.LogRecordOperation;
+import com.kabunx.component.log.annotation.OperationLog;
+import com.kabunx.component.log.dto.OperationLogMetadata;
 import org.springframework.core.BridgeMethodResolver;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ClassUtils;
@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class LogRecordParser {
-    public Collection<LogRecordOperation> buildLogRecordOperations(Method method, Class<?> targetClass) {
+public class OperationLogParser {
+    public Collection<OperationLogMetadata> buildLogRecordOperations(Method method, Class<?> targetClass) {
         // Don't allow no-public methods as required.
         if (!Modifier.isPublic(method.getModifiers())) {
             return Collections.emptyList();
@@ -29,39 +29,39 @@ public class LogRecordParser {
         specificMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
 
         // First try is the method in the target class.
-        Collection<LogRecordOperation> operations = parseLogRecordAnnotations(specificMethod);
-        Collection<LogRecordOperation> operationCollection = parseLogRecordAnnotations(ClassUtils.getInterfaceMethodIfPossible(method));
-        HashSet<LogRecordOperation> result = new HashSet<>();
+        Collection<OperationLogMetadata> operations = parseLogRecordAnnotations(specificMethod);
+        Collection<OperationLogMetadata> operationCollection = parseLogRecordAnnotations(ClassUtils.getInterfaceMethodIfPossible(method));
+        HashSet<OperationLogMetadata> result = new HashSet<>();
         result.addAll(operations);
         result.addAll(operationCollection);
         return result;
     }
 
-    private Collection<LogRecordOperation> parseLogRecordAnnotations(AnnotatedElement ae) {
-        Collection<LogRecord> logRecordAnnotationAnnotations = AnnotatedElementUtils.findAllMergedAnnotations(ae, LogRecord.class);
-        Collection<LogRecordOperation> operations = new ArrayList<>();
-        if (!logRecordAnnotationAnnotations.isEmpty()) {
-            for (LogRecord recordAnnotation : logRecordAnnotationAnnotations) {
+    private Collection<OperationLogMetadata> parseLogRecordAnnotations(AnnotatedElement ae) {
+        Collection<OperationLog> operationLogAnnotationAnnotations = AnnotatedElementUtils.findAllMergedAnnotations(ae, OperationLog.class);
+        Collection<OperationLogMetadata> operations = new ArrayList<>();
+        if (!operationLogAnnotationAnnotations.isEmpty()) {
+            for (OperationLog recordAnnotation : operationLogAnnotationAnnotations) {
                 operations.add(parseLogRecordAnnotation(ae, recordAnnotation));
             }
         }
         return operations;
     }
 
-    private LogRecordOperation parseLogRecordAnnotation(AnnotatedElement ae, LogRecord logRecord) {
-        LogRecordOperation operation = LogRecordOperation.builder()
-                .successTemplate(logRecord.success())
-                .failTemplate(logRecord.fail())
-                .bizNo(logRecord.bizNo())
-                .operator(logRecord.operator())
-                .condition(logRecord.condition())
+    private OperationLogMetadata parseLogRecordAnnotation(AnnotatedElement ae, OperationLog operationLog) {
+        OperationLogMetadata operation = OperationLogMetadata.builder()
+                .successTemplate(operationLog.success())
+                .failTemplate(operationLog.fail())
+                .bizNo(operationLog.bizNo())
+                .operator(operationLog.operator())
+                .condition(operationLog.condition())
                 .build();
         validateLogRecordOperation(ae, operation);
         return operation;
     }
 
 
-    private void validateLogRecordOperation(AnnotatedElement ae, LogRecordOperation operation) {
+    private void validateLogRecordOperation(AnnotatedElement ae, OperationLogMetadata operation) {
         if (!StringUtils.hasText(operation.getSuccessTemplate()) && !StringUtils.hasText(operation.getFailTemplate())) {
             throw new IllegalStateException("Invalid logRecord annotation configuration on '" +
                     ae.toString() + "'. 'one of successTemplate and failLogTemplate' attribute must be set.");

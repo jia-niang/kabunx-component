@@ -4,7 +4,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 
 import java.util.*;
 
-public class LogRecordContext {
+public class OperationLogContext {
 
     private static final TransmittableThreadLocal<Deque<Map<String, Object>>> VARIABLE_MAP_STACK = new TransmittableThreadLocal<>();
 

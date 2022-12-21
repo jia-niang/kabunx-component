@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class LogRecordEntity {
+public class OperationLogEntity {
     /**
      * id
      */
@@ -20,7 +20,7 @@ public class LogRecordEntity {
     /**
      * 租户
      */
-    private String tenant;
+    private String tenantName;
 
     /**
      * 保存的操作日志的类型，比如：订单类型、商品类型
@@ -54,6 +54,11 @@ public class LogRecordEntity {
     @NotBlank(message = "detail required")
     @Length(max = 500, message = "detail max length 500")
     private String detail;
+
+    /**
+     * 统计计数使用
+     */
+    private Integer count;
 
     /**
      * 记录是否是操作失败的日志

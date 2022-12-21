@@ -1,6 +1,6 @@
 package com.kabunx.component.log;
 
-public interface LogRecordMonitor {
+public interface OperationLogMonitor {
     String MONITOR_NAME = "log-record-performance";
     String MONITOR_TASK_BEFORE_EXECUTE = "before-execute";
     String MONITOR_TASK_AFTER_EXECUTE = "after-execute";
