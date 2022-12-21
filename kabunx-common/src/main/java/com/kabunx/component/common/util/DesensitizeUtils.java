@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 通用字符串脱敏工具类
  */
-public class MaskingUtils {
+public class DesensitizeUtils {
     private static final String X3 = "***";
     private static final String X4 = "****";
 

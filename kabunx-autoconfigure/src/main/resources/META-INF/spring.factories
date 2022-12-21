@@ -2,8 +2,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.kabunx.component.autoconfigure.web.WebAutoConfiguration,\
   com.kabunx.component.autoconfigure.web.InterceptorAutoConfiguration,\
+  com.kabunx.component.autoconfigure.log.LogRecordAutoConfiguration,\
   com.kabunx.component.autoconfigure.security.JwtAutoConfiguration,\
-  com.kabunx.component.autoconfigure.security.SecurityProviderAutoConfiguration,\
   com.kabunx.component.autoconfigure.security.WebSecurityAutoConfiguration,\
   com.kabunx.component.autoconfigure.security.WebfluxSecurityAutoConfiguration,\
   com.kabunx.component.autoconfigure.redis.RedisAutoConfiguration,\

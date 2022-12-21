@@ -1,16 +1,17 @@
 package com.kabunx.component.log.parser;
 
-import com.kabunx.component.log.service.FunctionService;
+import com.kabunx.component.log.FunctionTemplate;
+import com.kabunx.component.log.context.FunctionTemplateHolder;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class LogFunctionParser {
-    private final FunctionService functionService;
+public class FunctionTemplateParser {
+    private final FunctionTemplateHolder functionTemplateHolder;
 
-    public LogFunctionParser(FunctionService functionService) {
-        this.functionService = functionService;
+    public FunctionTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
+        this.functionTemplateHolder = functionTemplateHolder;
     }
 
     public String getFunctionReturnValue(Map<String, String> beforeFunctionNameAndReturnMap, Object value, String expression, String functionName) {
@@ -22,7 +23,7 @@ public class LogFunctionParser {
         if (beforeFunctionNameAndReturnMap != null && beforeFunctionNameAndReturnMap.containsKey(functionCallInstanceKey)) {
             functionReturnValue = beforeFunctionNameAndReturnMap.get(functionCallInstanceKey);
         } else {
-            functionReturnValue = functionService.apply(functionName, (String) value);
+            functionReturnValue = apply(functionName, (String) value);
         }
         return functionReturnValue;
     }
@@ -37,7 +38,15 @@ public class LogFunctionParser {
         return functionName + paramExpression;
     }
 
-    public boolean beforeFunction(String functionName) {
-        return true;
+    public boolean isBeforeFunction(String functionName) {
+        return functionTemplateHolder.isBeforeFunction(functionName);
+    }
+
+    public String apply(String functionName, String value) {
+        FunctionTemplate function = functionTemplateHolder.getFunctionTemplate(functionName);
+        if (Objects.isNull(function)) {
+            return value;
+        }
+        return function.apply(value);
     }
 }

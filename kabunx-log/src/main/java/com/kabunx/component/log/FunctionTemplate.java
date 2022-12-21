@@ -1,6 +1,6 @@
-package com.kabunx.component.log.parser;
+package com.kabunx.component.log;
 
-public interface FunctionParser {
+public interface FunctionTemplate {
     default boolean executeBefore() {
         return false;
     }

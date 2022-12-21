@@ -39,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public <T> Pagination<T> paginate(Class<T> clazz, SearchSourceBuilder builder, Page page) throws ElasticsearchException {
-        builder.from(page.getFrom());
+        builder.from(page.from());
         builder.size(page.getPageSize());
         SearchResponse response = search(clazz, builder);
         SearchHits hits = response.getHits();
@@ -52,7 +52,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public <T> SimplePagination<T> simplePaginate(Class<T> clazz, SearchSourceBuilder builder, Page page) throws ElasticsearchException {
-        builder.from(page.getFrom());
+        builder.from(page.from());
         builder.size(page.getPageSize() + 1);
         SearchResponse response = search(clazz, builder);
         SearchHits hits = response.getHits();

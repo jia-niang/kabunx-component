@@ -10,8 +10,8 @@ public class LogRecordOperation {
     private String failTemplate;
     private String operator;
     private String type;
-    private String bizNo;
     private String subType;
+    private String bizNo;
     private String extra;
     private String condition;
     private String success;

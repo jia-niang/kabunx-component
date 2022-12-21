@@ -139,9 +139,9 @@ public interface CurdRepository<E, C extends Example> {
             return new Pagination<>(page.getPage(), total, null);
         }
         if (StringUtils.isEmpty(example.getOrderByClause())) {
-            example.setOrderByClause("id limit " + page.getFrom() + ", " + page.getPageSize());
+            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
         } else {
-            example.setOrderByClause(example.getOrderByClause() + " limit " + page.getFrom() + ", " + page.getPageSize());
+            example.setOrderByClause(example.getOrderByClause() + " limit " + page.from() + ", " + page.getPageSize());
         }
         List<E> entities = findAllByExample(example);
         return new Pagination<>(page.getPage(), total, entities);
@@ -156,9 +156,9 @@ public interface CurdRepository<E, C extends Example> {
      */
     default SimplePagination<E> simplePaginate(C example, Page page) {
         if (StringUtils.isEmpty(example.getOrderByClause())) {
-            example.setOrderByClause("id limit " + page.getFrom() + ", " + page.getPageSize());
+            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
         } else {
-            example.setOrderByClause(example.getOrderByClause() + " limit " + page.getFrom() + ", " + page.getNextPageSize());
+            example.setOrderByClause(example.getOrderByClause() + " limit " + page.from() + ", " + page.morePageSize());
         }
         List<E> entities = findAllByExample(example);
         SimplePagination<E> simplePagination = new SimplePagination<>();

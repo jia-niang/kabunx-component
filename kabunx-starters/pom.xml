@@ -28,6 +28,7 @@
         <module>openfeign-spring-cloud-starter</module>
         <module>sms-spring-boot-starter</module>
         <module>email-spring-boot-starter</module>
+        <module>log-spring-boot-starter</module>
     </modules>
 
     <dependencies>

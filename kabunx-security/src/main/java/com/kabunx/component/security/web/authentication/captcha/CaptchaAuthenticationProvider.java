@@ -22,9 +22,9 @@ public class CaptchaAuthenticationProvider implements AuthenticationProvider {
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    private final CaptchaUserDetailsService captchaUserDetailsService;
-
     private final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+
+    private final CaptchaUserDetailsService captchaUserDetailsService;
 
     public CaptchaAuthenticationProvider(CaptchaUserDetailsService captchaUserDetailsService) {
         this.captchaUserDetailsService = captchaUserDetailsService;

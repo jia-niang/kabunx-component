@@ -19,11 +19,11 @@ public class Page implements Serializable {
 
     private int pageSize = 20;
 
-    public int getFrom() {
+    public int from() {
         return (page - 1) * pageSize;
     }
 
-    public int getNextPageSize() {
+    public int morePageSize() {
         return pageSize + 1;
     }
 }

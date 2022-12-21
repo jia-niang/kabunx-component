@@ -172,6 +172,11 @@
             </dependency>
             <dependency>
                 <groupId>com.kabunx.component</groupId>
+                <artifactId>log-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kabunx.component</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>

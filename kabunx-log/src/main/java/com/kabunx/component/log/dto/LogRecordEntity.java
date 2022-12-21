@@ -1,6 +1,5 @@
 package com.kabunx.component.log.dto;
 
-import com.kabunx.component.log.CodeVariableType;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -17,6 +16,7 @@ public class LogRecordEntity {
      * id
      */
     private Serializable id;
+
     /**
      * 租户
      */
@@ -28,6 +28,7 @@ public class LogRecordEntity {
     @NotBlank(message = "type required")
     @Length(max = 200, message = "type max length is 200")
     private String type;
+
     /**
      * 日志的子类型，比如订单的C端日志，和订单的B端日志，type都是订单类型，但是子类型不一样
      */
@@ -50,21 +51,23 @@ public class LogRecordEntity {
     /**
      * 日志内容
      */
-    @NotBlank(message = "opAction required")
-    @Length(max = 255, message = "operator max length 255")
-    private String action;
+    @NotBlank(message = "detail required")
+    @Length(max = 500, message = "detail max length 500")
+    private String detail;
+
     /**
      * 记录是否是操作失败的日志
      */
     private boolean fail;
     /**
-     * 日志的创建时间
-     */
-    private Date createTime;
-    /**
      * 日志的额外信息
      */
     private String extra;
+
+    /**
+     * 日志的创建时间
+     */
+    private Date createTime;
 
     /**
      * 打印日志的代码信息

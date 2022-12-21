@@ -1,5 +1,6 @@
 package com.kabunx.component.log.parser;
 
+import com.kabunx.component.log.context.FunctionTemplateHolder;
 import com.kabunx.component.log.dto.MethodExecuteResult;
 import com.kabunx.component.log.context.expression.LogRecordExpressionEvaluator;
 import com.kabunx.component.log.util.DiffUtils;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.context.expression.AnnotatedElementKey;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.lang.NonNull;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -16,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LogRecordValueParser implements BeanFactoryAware {
+public class LogRecordTemplateParser extends FunctionTemplateParser implements BeanFactoryAware {
 
     private static final Pattern pattern = Pattern.compile("\\{\\s*(\\w*)\\s*\\{(.*?)}}");
     public static final String COMMA = ",";
@@ -24,13 +26,8 @@ public class LogRecordValueParser implements BeanFactoryAware {
 
     private final LogRecordExpressionEvaluator expressionEvaluator = new LogRecordExpressionEvaluator();
 
-    private final LogFunctionParser logFunctionParser;
-
-    private final DiffUtils diffUtils;
-
-    public LogRecordValueParser(LogFunctionParser logFunctionParser, DiffUtils diffUtils) {
-        this.logFunctionParser = logFunctionParser;
-        this.diffUtils = diffUtils;
+    public LogRecordTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
+        super(functionTemplateHolder);
     }
 
     @Override
@@ -64,32 +61,31 @@ public class LogRecordValueParser implements BeanFactoryAware {
                 methodExecuteResult.getArgs(), methodExecuteResult.getTargetClass(), methodExecuteResult.getResult(),
                 methodExecuteResult.getErrorMsg(), beanFactory);
 
-        for (String expressionTemplate : templates) {
-            if (expressionTemplate.contains("{")) {
-                Matcher matcher = pattern.matcher(expressionTemplate);
-                StringBuffer parsedStr = new StringBuffer();
-                AnnotatedElementKey annotatedElementKey = new AnnotatedElementKey(methodExecuteResult.getMethod(), methodExecuteResult.getTargetClass());
-                boolean flag = true;
-                while (matcher.find()) {
-                    String expression = matcher.group(2);
-                    String functionName = matcher.group(1);
-                    if (DiffUtils.diffFunctionName.equals(functionName)) {
-                        expression = getDiffFunctionValue(evaluationContext, annotatedElementKey, expression);
-                    } else {
-                        Object value = expressionEvaluator.parseExpression(expression, annotatedElementKey, evaluationContext);
-                        expression = logFunctionParser.getFunctionReturnValue(beforeFunctionNameAndReturnMap, value, expression, functionName);
-                    }
-                    if (expression != null && !Objects.equals(expression, "")) {
-                        flag = false;
-                    }
-                    matcher.appendReplacement(parsedStr, Matcher.quoteReplacement(expression == null ? "" : expression));
-                }
-                matcher.appendTail(parsedStr);
-                expressionValues.put(expressionTemplate, flag ? expressionTemplate : parsedStr.toString());
-            } else {
-                expressionValues.put(expressionTemplate, expressionTemplate);
+        for (String template : templates) {
+            if (StringUtils.isEmpty(template) || !template.contains("{")) {
+                expressionValues.put(template, template);
+                continue;
             }
-
+            Matcher matcher = pattern.matcher(template);
+            StringBuffer parsedStr = new StringBuffer();
+            AnnotatedElementKey annotatedElementKey = new AnnotatedElementKey(methodExecuteResult.getMethod(), methodExecuteResult.getTargetClass());
+            boolean flag = true;
+            while (matcher.find()) {
+                String expression = matcher.group(2);
+                String functionName = matcher.group(1);
+                if (DiffUtils.diffFunctionName.equals(functionName)) {
+                    expression = getDiffFunctionValue(evaluationContext, annotatedElementKey, expression);
+                } else {
+                    Object value = expressionEvaluator.parseExpression(expression, annotatedElementKey, evaluationContext);
+                    expression = getFunctionReturnValue(beforeFunctionNameAndReturnMap, value, expression, functionName);
+                }
+                if (expression != null && !Objects.equals(expression, "")) {
+                    flag = false;
+                }
+                matcher.appendReplacement(parsedStr, Matcher.quoteReplacement(expression == null ? "" : expression));
+            }
+            matcher.appendTail(parsedStr);
+            expressionValues.put(template, flag ? template : parsedStr.toString());
         }
         return expressionValues;
     }
@@ -98,11 +94,11 @@ public class LogRecordValueParser implements BeanFactoryAware {
         String[] params = parseDiffFunction(expression);
         if (params.length == 1) {
             Object targetObj = expressionEvaluator.parseExpression(params[0], annotatedElementKey, evaluationContext);
-            expression = diffUtils.diff(targetObj);
+            expression = DiffUtils.diff(targetObj);
         } else if (params.length == 2) {
             Object sourceObj = expressionEvaluator.parseExpression(params[0], annotatedElementKey, evaluationContext);
             Object targetObj = expressionEvaluator.parseExpression(params[1], annotatedElementKey, evaluationContext);
-            expression = diffUtils.diff(sourceObj, targetObj);
+            expression = DiffUtils.diff(sourceObj, targetObj);
         }
         return expression;
     }
@@ -117,22 +113,23 @@ public class LogRecordValueParser implements BeanFactoryAware {
     public Map<String, String> processBeforeExecuteFunctionTemplate(Collection<String> templates, Class<?> targetClass, Method method, Object[] args) {
         Map<String, String> functionNameAndReturnValueMap = new HashMap<>();
         EvaluationContext evaluationContext = expressionEvaluator.createEvaluationContext(method, args, targetClass, null, null, beanFactory);
-        for (String expressionTemplate : templates) {
-            if (expressionTemplate.contains("{")) {
-                Matcher matcher = pattern.matcher(expressionTemplate);
-                while (matcher.find()) {
-                    String expression = matcher.group(2);
-                    if (expression.contains("#_ret") || expression.contains("#_errorMsg")) {
-                        continue;
-                    }
-                    AnnotatedElementKey annotatedElementKey = new AnnotatedElementKey(method, targetClass);
-                    String functionName = matcher.group(1);
-                    if (logFunctionParser.beforeFunction(functionName)) {
-                        Object value = expressionEvaluator.parseExpression(expression, annotatedElementKey, evaluationContext);
-                        String functionReturnValue = logFunctionParser.getFunctionReturnValue(null, value, expression, functionName);
-                        String functionCallInstanceKey = logFunctionParser.getFunctionCallInstanceKey(functionName, expression);
-                        functionNameAndReturnValueMap.put(functionCallInstanceKey, functionReturnValue);
-                    }
+        for (String template : templates) {
+            if (StringUtils.isEmpty(template) || !template.contains("{")) {
+                continue;
+            }
+            Matcher matcher = pattern.matcher(template);
+            while (matcher.find()) {
+                String expression = matcher.group(2);
+                if (expression.contains("#_result") || expression.contains("#_errorMsg")) {
+                    continue;
+                }
+                AnnotatedElementKey annotatedElementKey = new AnnotatedElementKey(method, targetClass);
+                String functionName = matcher.group(1);
+                if (isBeforeFunction(functionName)) {
+                    Object value = expressionEvaluator.parseExpression(expression, annotatedElementKey, evaluationContext);
+                    String functionReturnValue = getFunctionReturnValue(null, value, expression, functionName);
+                    String functionCallInstanceKey = getFunctionCallInstanceKey(functionName, expression);
+                    functionNameAndReturnValueMap.put(functionCallInstanceKey, functionReturnValue);
                 }
             }
         }

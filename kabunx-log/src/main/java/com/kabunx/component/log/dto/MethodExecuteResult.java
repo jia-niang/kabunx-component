@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.lang.reflect.Method;
 
+/**
+ * 方法解析结果
+ */
 @Data
 public class MethodExecuteResult {
     private boolean success;

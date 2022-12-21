@@ -1,7 +1,8 @@
-package com.kabunx.component.log.aspect;
+package com.kabunx.component.log.aop;
 
 import com.kabunx.component.log.annotation.LogRecord;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -17,7 +18,10 @@ public class LogRecordAspect {
     // 在切点前后执行方法，通过 @annotation(logRecordAnnotation) 绑定注解到第二个参数
     // ProceedingJoinPoint 必须要放在第一个参数
     @Around("logRecordMethod() && @annotation(logRecord)")
-    public Object BeforeMethodStart(ProceedingJoinPoint joinPoint, LogRecord logRecord) throws Throwable {
+    public Object doAround(ProceedingJoinPoint joinPoint, LogRecord logRecord) throws Throwable {
+        joinPoint.getThis();
+        joinPoint.getArgs();
+        Signature signature = joinPoint.getSignature();
         return null;
     }
 }

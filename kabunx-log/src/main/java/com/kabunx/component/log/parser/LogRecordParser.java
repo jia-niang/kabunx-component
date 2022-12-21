@@ -1,4 +1,4 @@
-package com.kabunx.component.log;
+package com.kabunx.component.log.parser;
 
 import com.kabunx.component.log.annotation.LogRecord;
 import com.kabunx.component.log.dto.LogRecordOperation;
@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class LogRecordOperationSource {
-    public Collection<LogRecordOperation> computeLogRecordOperations(Method method, Class<?> targetClass) {
+public class LogRecordParser {
+    public Collection<LogRecordOperation> buildLogRecordOperations(Method method, Class<?> targetClass) {
         // Don't allow no-public methods as required.
         if (!Modifier.isPublic(method.getModifiers())) {
             return Collections.emptyList();
