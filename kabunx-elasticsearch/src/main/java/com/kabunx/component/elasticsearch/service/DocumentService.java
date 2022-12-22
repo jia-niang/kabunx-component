@@ -3,6 +3,9 @@ package com.kabunx.component.elasticsearch.service;
 import com.kabunx.component.elasticsearch.exception.ElasticsearchException;
 
 public interface DocumentService {
+
+    <T> T save(T entity);
+
     String get(String index, String id) throws ElasticsearchException;
 
     boolean exists(String index, String id) throws ElasticsearchException;

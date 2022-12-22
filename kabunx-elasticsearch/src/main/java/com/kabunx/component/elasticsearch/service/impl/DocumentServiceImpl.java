@@ -15,6 +15,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.io.IOException;
 
@@ -22,8 +23,15 @@ import java.io.IOException;
 public class DocumentServiceImpl implements DocumentService {
     private final RestHighLevelClient client;
 
-    public DocumentServiceImpl(RestHighLevelClient client) {
+    private final ElasticsearchOperations operations;
+
+    public DocumentServiceImpl(RestHighLevelClient client, ElasticsearchOperations operations) {
         this.client = client;
+        this.operations = operations;
+    }
+
+    public <T> T save(T entity) {
+        return operations.save(entity);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.kabunx.component.elasticsearch.util;
 
-import com.kabunx.component.elasticsearch.annotation.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 public class ReflectionUtils {
 

@@ -16,6 +16,7 @@ import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,8 +27,11 @@ import java.util.Objects;
 public class SearchServiceImpl implements SearchService {
     private final RestHighLevelClient client;
 
-    public SearchServiceImpl(RestHighLevelClient client) {
+    private final ElasticsearchOperations operations;
+
+    public SearchServiceImpl(RestHighLevelClient client, ElasticsearchOperations operations) {
         this.client = client;
+        this.operations = operations;
     }
 
     @Override

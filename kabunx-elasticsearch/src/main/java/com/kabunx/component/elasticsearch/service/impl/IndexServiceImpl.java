@@ -9,6 +9,9 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.*;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.IndexOperations;
+import org.springframework.data.elasticsearch.core.document.Document;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,8 +19,19 @@ import java.util.Map;
 public class IndexServiceImpl implements IndexService {
     private final RestHighLevelClient client;
 
-    public IndexServiceImpl(RestHighLevelClient client) {
+    private final ElasticsearchOperations operations;
+
+    public IndexServiceImpl(RestHighLevelClient client, ElasticsearchOperations operations) {
         this.client = client;
+        this.operations = operations;
+    }
+
+    public boolean create(Class<?> tClass) {
+        return operations.indexOps(tClass).create();
+    }
+
+    public void refresh(Class<?> tClass) {
+        operations.indexOps(tClass).refresh();
     }
 
     @Override
@@ -43,6 +57,11 @@ public class IndexServiceImpl implements IndexService {
         }
     }
 
+
+    public boolean exists(Class<?> tClass) {
+        return operations.indexOps(tClass).exists();
+    }
+
     @Override
     public boolean exists(String index) {
         try {
@@ -62,6 +81,12 @@ public class IndexServiceImpl implements IndexService {
         } catch (IOException ig) {
             return false;
         }
+    }
+
+    public boolean putMapping(Class<?> tClass) {
+        IndexOperations indexOperations = operations.indexOps(tClass);
+        Document document = indexOperations.createMapping();
+        return indexOperations.putMapping(document);
     }
 
     @Override
