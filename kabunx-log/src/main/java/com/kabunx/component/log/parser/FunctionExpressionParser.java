@@ -2,26 +2,27 @@ package com.kabunx.component.log.parser;
 
 import com.kabunx.component.log.FunctionTemplate;
 import com.kabunx.component.log.context.FunctionTemplateHolder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class FunctionTemplateParser {
+public class FunctionExpressionParser {
     private final FunctionTemplateHolder functionTemplateHolder;
 
-    public FunctionTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
+    public FunctionExpressionParser(FunctionTemplateHolder functionTemplateHolder) {
         this.functionTemplateHolder = functionTemplateHolder;
     }
 
-    public String getFunctionReturnValue(Map<String, String> beforeFunctionNameAndReturnMap, Object value, String expression, String functionName) {
+    public String getFunctionReturnValue(Map<String, String> beforeValueMap, Object value, String expression, String functionName) {
         if (StringUtils.isEmpty(functionName)) {
             return Objects.isNull(value) ? "" : value.toString();
         }
         String functionReturnValue;
         String functionCallInstanceKey = getFunctionCallInstanceKey(functionName, expression);
-        if (beforeFunctionNameAndReturnMap != null && beforeFunctionNameAndReturnMap.containsKey(functionCallInstanceKey)) {
-            functionReturnValue = beforeFunctionNameAndReturnMap.get(functionCallInstanceKey);
+        if (!CollectionUtils.isEmpty(beforeValueMap) && beforeValueMap.containsKey(functionCallInstanceKey)) {
+            functionReturnValue = beforeValueMap.get(functionCallInstanceKey);
         } else {
             functionReturnValue = apply(functionName, (String) value);
         }

@@ -5,17 +5,12 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
 @Data
 @Builder
-public class OperationLogEntity {
-    /**
-     * id
-     */
-    private Serializable id;
+public class BizLogEntity {
 
     /**
      * 租户
@@ -56,14 +51,15 @@ public class OperationLogEntity {
     private String detail;
 
     /**
-     * 统计计数使用
+     * 计数使用
      */
     private Integer count;
 
     /**
-     * 记录是否是操作失败的日志
+     * 标记为失败或成功
      */
-    private boolean fail;
+    private String flag;
+
     /**
      * 日志的额外信息
      */

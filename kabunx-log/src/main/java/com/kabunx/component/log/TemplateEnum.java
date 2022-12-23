@@ -1,8 +1,9 @@
 package com.kabunx.component.log;
 
 public enum TemplateEnum {
-    ADD("", "【】从【空】修改为【】"),
-    DEL("", "");
+    CREATE("create", "新建了数据"),
+    UPDATE("update", "修改了数据"),
+    DELETE("delete", "删除了数据");
 
     private final String name;
 

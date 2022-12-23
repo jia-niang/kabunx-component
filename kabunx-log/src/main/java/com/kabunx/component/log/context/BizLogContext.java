@@ -4,11 +4,16 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 
 import java.util.*;
 
-public class OperationLogContext {
+/**
+ * 业务日志上下文
+ */
+public class BizLogContext {
 
     private static final TransmittableThreadLocal<Deque<Map<String, Object>>> VARIABLE_MAP_STACK = new TransmittableThreadLocal<>();
 
     private static final TransmittableThreadLocal<Map<String, Object>> GLOBAL_VARIABLE_MAP = new TransmittableThreadLocal<>();
+
+    private static final String COUNT_KEY = "count";
 
     public static Map<String, Object> getVariables() {
         return VARIABLE_MAP_STACK.get().peek();
@@ -29,6 +34,15 @@ public class OperationLogContext {
             VARIABLE_MAP_STACK.get().push(new HashMap<>());
         }
         VARIABLE_MAP_STACK.get().element().put(key, value);
+    }
+
+    public static void setCountVariable(int count) {
+        setVariable(COUNT_KEY, count);
+    }
+
+    public static int getCountVariable() {
+        Object count = getVariable(COUNT_KEY);
+        return Objects.isNull(count) ? 1 : (int) count;
     }
 
     public static void clear() {

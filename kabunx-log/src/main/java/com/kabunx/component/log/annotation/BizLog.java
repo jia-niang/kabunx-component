@@ -6,20 +6,20 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface OperationLog {
+public @interface BizLog {
     /**
      * 操作日志的文本模板
      *
-     * @return 文本版本
+     * @return 成功模板
      */
     String success();
 
     /**
      * 操作日志失败的文本版本
      *
-     * @return 文本版本
+     * @return 失败模板
      */
-    String fail() default "";
+    String error() default "";
 
     /**
      * 操作日志的执行人
@@ -33,26 +33,26 @@ public @interface OperationLog {
      *
      * @return 业务对象标识
      */
-    String bizNo();
+    String bizNo() default "";
+
+    /**
+     * 保存的操作日志的类型，比如：订单类型、商品类型
+     *
+     * @return type
+     */
+    String type() default "";
 
     /**
      * 操作日志的种类
      *
-     * @return 种类
+     * @return 子类
      */
-    String category() default "";
-
-    /**
-     * 扩展参数，记录操作日志的修改详情
-     *
-     * @return 修改详情
-     */
-    String detail() default "";
+    String subType() default "";
 
     /**
      * 记录日志的条件
      *
      * @return 条件
      */
-    String condition() default "";
+    String condition() default "true";
 }
