@@ -32,8 +32,8 @@ public class BizLogAspectParser implements BeanFactoryAware {
     }
 
     private <T> AspectParser<T> buildAspectParser(Parser parser, Supplier<String> getExpression, Class<T> tClass) {
-        return (point, proceed, errorMsg) -> {
-            ExpressionArgs expressionArgs = getExpressionArgs(point, proceed, errorMsg);
+        return (point, result, errorMsg) -> {
+            ExpressionArgs expressionArgs = getExpressionArgs(point, result, errorMsg);
             return parser.parse(getExpression.get(), expressionArgs, tClass);
         };
     }

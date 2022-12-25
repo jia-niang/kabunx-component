@@ -1,13 +1,12 @@
 package com.kabunx.component.log.aop;
 
+import com.kabunx.component.common.context.AuthContextHolder;
+import com.kabunx.component.common.util.ThreadUtils;
 import com.kabunx.component.log.context.BizLogServiceHolder;
-import com.kabunx.component.log.dto.CodeVariableType;
+import com.kabunx.component.log.dto.*;
 import com.kabunx.component.log.BizLogMonitor;
 import com.kabunx.component.log.parser.BizLogAnnotationParser;
-import com.kabunx.component.log.dto.MethodExecute;
-import com.kabunx.component.log.context.BizLogContext;
-import com.kabunx.component.log.dto.BizLogEntity;
-import com.kabunx.component.log.dto.BizLogExpression;
+import com.kabunx.component.log.context.BizLogContextHolder;
 import com.kabunx.component.log.parser.BizLogExpressionParser;
 import com.kabunx.component.log.service.OperatorService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
 public class BizLogInterceptor implements MethodInterceptor {
@@ -50,46 +50,38 @@ public class BizLogInterceptor implements MethodInterceptor {
         if (AopUtils.isAopProxy(invocation.getThis())) {
             return invocation.proceed();
         }
-        StopWatch stopWatch = new StopWatch(BizLogMonitor.MONITOR_NAME);
-        stopWatch.start(BizLogMonitor.MONITOR_TASK_BEFORE_EXECUTE);
         MethodExecute methodExecute = new MethodExecute(invocation);
-        BizLogContext.empty();
-        Collection<BizLogExpression> expressions = new ArrayList<>();
-        Map<String, String> beforeValueMap = new HashMap<>();
-        try {
-            expressions = bizLogAnnotationParser.getBizLogExpressions(methodExecute);
-            List<String> spElTemplates = getSpElTemplatesBeforeExecute(expressions);
-            beforeValueMap = bizLogExpressionParser.handleSpElTemplatesBeforeExecute(spElTemplates, methodExecute);
-        } catch (Exception e) {
-            log.error("log record parse before function exception", e);
-        } finally {
-            stopWatch.stop();
-        }
+        BizLogContextHolder.empty();
         // 程序处理
-        Object result = null;
         try {
-            result = invocation.proceed();
+            Object result = invocation.proceed();
             methodExecute.setSuccess(true);
             methodExecute.setResult(result);
-        } catch (Exception e) {
+            return result;
+        } catch (Exception ex) {
             methodExecute.setSuccess(false);
-            methodExecute.setThrowable(e);
-            methodExecute.setErrorMsg(e.getMessage());
-        }
-        stopWatch.start(BizLogMonitor.MONITOR_TASK_AFTER_EXECUTE);
-        try {
-            if (!CollectionUtils.isEmpty(expressions)) {
-                handleBizLogAfterExecute(methodExecute, beforeValueMap, expressions);
-            }
-        } catch (Exception t) {
-            log.error("[BizLog] handle biz log exception", t);
-            throw t;
+            methodExecute.setThrowable(ex);
+            methodExecute.setErrorMsg(ex.getMessage());
+            throw ex;
         } finally {
-            BizLogContext.clear();
-            stopWatch.stop();
-            log.info(stopWatch.prettyPrint());
+            // 暂时没有考虑到更好的办法
+            BizLogContextHolder.setVariable("auth", AuthContextHolder.getCurrentAuth());
+            methodExecute.setContextVariables(BizLogContextHolder.getVariables());
+            ThreadPoolExecutor executor = ThreadUtils.getIoThreadPoolExecutor();
+            executor.execute(() -> {
+                StopWatch stopWatch = new StopWatch(BizLogMonitor.MONITOR_NAME);
+                stopWatch.start(BizLogMonitor.MONITOR_TASK_AFTER_EXECUTE);
+                try {
+                    handleBizLogAfterExecute(methodExecute);
+                } catch (Exception ex) {
+                    log.error("[BizLog] handle biz log exception", ex);
+                } finally {
+                    stopWatch.stop();
+                    log.info("[BizLog] handle biz log running time = {} ms", stopWatch.getTotalTimeMillis());
+                }
+            });
+            BizLogContextHolder.clear();
         }
-        return result;
     }
 
     public void setTenantName(String tenantName) {
@@ -100,41 +92,27 @@ public class BizLogInterceptor implements MethodInterceptor {
         this.joinTransaction = joinTransaction;
     }
 
-    /**
-     * 将注解中的元素加入到解析的模板中（方法执行前）
-     *
-     * @param expressions 注解信息
-     * @return 模板信息
-     */
-    private List<String> getSpElTemplatesBeforeExecute(Collection<BizLogExpression> expressions) {
-        List<String> spElTemplates = new ArrayList<>();
-        for (BizLogExpression expression : expressions) {
-            List<String> templates = getSpElTemplates(expression, expression.getSuccess());
-            if (!CollectionUtils.isEmpty(templates)) {
-                spElTemplates.addAll(templates);
-            }
+    private void handleBizLogAfterExecute(MethodExecute execute) {
+        Collection<BizLogExpression> expressions = bizLogAnnotationParser.getBizLogExpressions(execute);
+        if (CollectionUtils.isEmpty(expressions)) {
+            return;
         }
-        return spElTemplates;
-    }
-
-    private void handleBizLogAfterExecute(MethodExecute methodExecute,
-                                          Map<String, String> beforeValueMap,
-                                          Collection<BizLogExpression> expressions) {
+        ExpressionArgs args = bizLogExpressionParser.getExpressionArgs(execute);
         for (BizLogExpression expression : expressions) {
             try {
                 if (StringUtils.isEmpty(expression.getSuccess()) && StringUtils.isEmpty(expression.getError())) {
                     continue;
                 }
-                if (exitsCondition(methodExecute, beforeValueMap, expression)) {
+                if (checkConditionIsFalse(expression, args)) {
                     continue;
                 }
-                if (methodExecute.isSuccess()) {
-                    handleSuccessBizLog(methodExecute, beforeValueMap, expression);
+                if (execute.isSuccess()) {
+                    handleSuccessBizLog(expression, args);
                 } else {
-                    handleErrorBizLog(methodExecute, beforeValueMap, expression);
+                    handleErrorBizLog(expression, args);
                 }
             } catch (Exception t) {
-                log.error("log record execute exception", t);
+                log.error("[BizLog] log execute exception", t);
                 if (joinTransaction) {
                     throw t;
                 }
@@ -145,49 +123,35 @@ public class BizLogInterceptor implements MethodInterceptor {
     /**
      * 处理成功的模板日志
      */
-    private void handleSuccessBizLog(MethodExecute execute, Map<String, String> beforeValueMap, BizLogExpression expression) {
-        String detail;
-        if (!StringUtils.isEmpty(expression.getSuccess())) {
-            String condition = bizLogExpressionParser.parseTemplate(expression.getCondition(), execute, beforeValueMap);
-            if (!StringUtils.endsWithIgnoreCase(condition, "true")) {
-                return;
-            }
-            detail = expression.getSuccess();
-        } else {
-            detail = expression.getSuccess();
-        }
-        if (StringUtils.isEmpty(detail)) {
-            // 没有日志内容则忽略
+    private void handleSuccessBizLog(BizLogExpression expression, ExpressionArgs args) {
+        if (StringUtils.isEmpty(expression.getSuccess())) {
             return;
         }
-        List<String> spElTemplates = getSpElTemplates(expression, detail);
+        List<String> spElTemplates = getSpElTemplates(expression, expression.getSuccess());
         String operator = getOperatorAndPutTemplate(expression, spElTemplates);
-        Map<String, String> expressionValues = bizLogExpressionParser.parseTemplates(spElTemplates, execute, beforeValueMap);
-        saveLog(execute.getMethod(), "success", expression, operator, detail, expressionValues);
+        Map<String, String> expressionValues = bizLogExpressionParser.doParse(spElTemplates, args);
+        saveLog("success", expression, operator, expression.getSuccess(), expressionValues);
     }
 
-    private void handleErrorBizLog(MethodExecute methodExecute, Map<String, String> beforeValueMap, BizLogExpression expression) {
+    private void handleErrorBizLog(BizLogExpression expression, ExpressionArgs args) {
         if (StringUtils.isEmpty(expression.getError())) {
             return;
         }
-        String detail = expression.getError();
-        List<String> spElTemplates = getSpElTemplates(expression, detail);
-        String operatorIdFromService = getOperatorAndPutTemplate(expression, spElTemplates);
-
-        Map<String, String> expressionValues = bizLogExpressionParser.parseTemplates(spElTemplates, methodExecute, beforeValueMap);
-        saveLog(methodExecute.getMethod(), "error", expression, operatorIdFromService, detail, expressionValues);
+        List<String> spElTemplates = getSpElTemplates(expression, expression.getError());
+        String operator = getOperatorAndPutTemplate(expression, spElTemplates);
+        Map<String, String> expressionValues = bizLogExpressionParser.doParse(spElTemplates, args);
+        saveLog("error", expression, operator, expression.getError(), expressionValues);
     }
 
-    private boolean exitsCondition(MethodExecute methodExecute, Map<String, String> beforeValueMap, BizLogExpression expression) {
+    private boolean checkConditionIsFalse(BizLogExpression expression, ExpressionArgs args) {
         if (!StringUtils.isEmpty(expression.getCondition())) {
-            String condition = bizLogExpressionParser.parseTemplate(expression.getCondition(), methodExecute, beforeValueMap);
+            String condition = bizLogExpressionParser.doParse(expression.getCondition(), args);
             return StringUtils.endsWithIgnoreCase(condition, "false");
         }
         return false;
     }
 
-    private void saveLog(Method method, String flag,
-                         BizLogExpression expression, String operator,
+    private void saveLog(String flag, BizLogExpression expression, String operator,
                          String detail, Map<String, String> expressionValues) {
         if (StringUtils.isEmpty(expressionValues.get(detail))) {
             return;
@@ -202,9 +166,8 @@ public class BizLogInterceptor implements MethodInterceptor {
                 .operator(getRealOperator(expression, operator, expressionValues))
                 .subType(expressionValues.get(expression.getSubType()))
                 .extra(expressionValues.get(expression.getExtra()))
-                .codeVariable(getCodeVariable(method))
                 .detail(expressionValues.get(detail))
-                .count(BizLogContext.getCountVariable())
+                .count(BizLogContextHolder.getCountVariable())
                 .flag(flag)
                 .createTime(new Date())
                 .build();

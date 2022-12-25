@@ -7,6 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.aop.framework.AopProxyUtils;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * 函数执行信息
@@ -17,6 +18,11 @@ public class MethodExecute {
     private final Object[] args;
     private final Object target;
     private final Class<?> targetClass;
+
+    /**
+     * 上下文变量
+     */
+    private Map<String, Object> contextVariables;
 
     // 执行结果
     private boolean success;

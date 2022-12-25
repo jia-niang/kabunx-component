@@ -26,7 +26,7 @@ public @interface BizLog {
      *
      * @return 执行人
      */
-    String operator() default "";
+    String operator() default "{#auth.username}";
 
     /**
      * 操作日志绑定的业务对象标识

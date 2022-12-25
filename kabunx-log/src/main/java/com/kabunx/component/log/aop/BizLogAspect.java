@@ -2,8 +2,7 @@ package com.kabunx.component.log.aop;
 
 import com.kabunx.component.log.BizLogMonitor;
 import com.kabunx.component.log.annotation.BizLog;
-import com.kabunx.component.log.context.BizLogContext;
-import com.kabunx.component.log.dto.MethodExecute;
+import com.kabunx.component.log.context.BizLogContextHolder;
 import com.kabunx.component.log.parser.BizLogAspectParser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -31,7 +30,7 @@ public class BizLogAspect {
     // ProceedingJoinPoint 必须要放在第一个参数
     @Around("bizLogMethod() && @annotation(bizLog)")
     public Object doAround(ProceedingJoinPoint joinPoint, BizLog bizLog) throws Throwable {
-        BizLogContext.empty();
+        BizLogContextHolder.empty();
         Object result = joinPoint.proceed();
         StopWatch stopWatch = new StopWatch(BizLogMonitor.MONITOR_NAME);
         stopWatch.start(BizLogMonitor.MONITOR_TASK_AFTER_EXECUTE);
@@ -40,7 +39,7 @@ public class BizLogAspect {
         } catch (Exception e) {
             log.error("[BizLog] handle biz log exception", e);
         } finally {
-            BizLogContext.clear();
+            BizLogContextHolder.clear();
             stopWatch.stop();
             log.info(stopWatch.prettyPrint());
         }

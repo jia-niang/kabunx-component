@@ -44,8 +44,8 @@ public class BizLogAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(BizLogExpressionParser.class)
-    BizLogExpressionParser logTemplateParser(FunctionTemplateHolder functionTemplateHolder) {
-        return new BizLogExpressionParser(functionTemplateHolder);
+    BizLogExpressionParser logTemplateParser() {
+        return new BizLogExpressionParser();
     }
 
     @Bean

@@ -1,6 +1,7 @@
 package com.kabunx.component.common.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -74,7 +75,7 @@ public class ThreadUtils {
                 KEEP_ALIVE_SECONDS,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
-                new CustomThreadFactory("cpu")
+                new CustomThreadFactory("CPU")
         );
 
         static {
@@ -106,11 +107,11 @@ public class ThreadUtils {
     private static class IoThreadPoolLazyHolder {
         private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
                 IO_CORE,
-                Math.max(2, CPU_COUNT * 2),
+                Math.max(10, CPU_COUNT * 2),
                 KEEP_ALIVE_SECONDS,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
-                new CustomThreadFactory("io")
+                new CustomThreadFactory("IO")
         );
 
         static {
@@ -147,7 +148,7 @@ public class ThreadUtils {
                 KEEP_ALIVE_SECONDS,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
-                new CustomThreadFactory("mixed")
+                new CustomThreadFactory("MIXED")
         );
 
         static {
@@ -266,7 +267,7 @@ public class ThreadUtils {
         }
 
         @Override
-        public Thread newThread(Runnable target) {
+        public Thread newThread(@NonNull Runnable target) {
             String name = "CustomThread [" + threadName + "]-" + threadCount.getAndIncrement();
             Thread t = new Thread(threadGroup, target, name, 0);
             if (t.isDaemon()) {
