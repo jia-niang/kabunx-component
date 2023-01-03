@@ -49,18 +49,18 @@ public class CallableUtils {
                 LocalDateTime startTime = TimeUtils.today(startHour, 0, 0);
                 LocalDateTime endTime = TimeUtils.today(endHour, 0, 0);
                 // 时间未到
-                if (now.compareTo(startTime) < 0) {
+                if (now.isBefore(startTime)) {
                     Duration duration = Duration.between(now, startTime);
-                    log.warn("调度时间暂未开始，将等待【{}】ms", duration.toMillis());
+                    log.warn("[DailyLoop] 调度时间暂未开始，将等待【{}】ms", duration.toMillis());
                     ThreadUtils.sleepMillis(duration.toMillis());
                     continue;
                 }
                 // 时间已过
-                if (now.compareTo(endTime) > 0) {
+                if (now.isAfter(endTime)) {
                     // 第二天开始的时间
                     LocalDateTime nextStartTime = TimeUtils.tomorrow(startHour, 0, 0);
                     Duration duration = Duration.between(now, nextStartTime);
-                    log.warn("调度时间已过期，下一次执行将等待【{}】ms", duration.toMillis());
+                    log.warn("[DailyLoop] 调度时间已过期，下一次执行将等待【{}】ms", duration.toMillis());
                     ThreadUtils.sleepMillis(duration.toMillis());
                     continue;
                 }
@@ -69,12 +69,12 @@ public class CallableUtils {
                     // 执行成功将明天继续
                     LocalDateTime nextStartTime = TimeUtils.tomorrow(startHour, 0, 0);
                     Duration duration = Duration.between(LocalDateTime.now(), nextStartTime);
-                    log.warn("当前调度任务已完成，下一次执行将等待【{}】ms", duration.toMillis());
+                    log.warn("[DailyLoop] 当前调度任务已完成，下一次执行将等待【{}】ms", duration.toMillis());
                     ms = duration.toMillis();
                 }
                 ThreadUtils.sleepMillis(ms);
             } catch (Exception ex) {
-                log.error("循环体内逻辑异常", ex);
+                log.error("[DailyLoop] 循环体内逻辑异常", ex);
             }
         }
     }

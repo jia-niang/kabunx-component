@@ -37,11 +37,9 @@ public class DesensitizeUtils {
         if (StringUtils.isBlank(id)) {
             return "";
         }
-        return StringUtils.left(id, 3).concat(
-                StringUtils.removeStart(
-                        StringUtils.leftPad(StringUtils.right(id, 4), StringUtils.length(id), "*"), X3
-                )
-        );
+        return StringUtils.left(id, 3).concat(StringUtils.removeStart(
+                StringUtils.leftPad(StringUtils.right(id, 4), StringUtils.length(id), "*"), X3
+        ));
     }
 
     /**
@@ -61,12 +59,9 @@ public class DesensitizeUtils {
         if (StringUtils.isBlank(num)) {
             return "";
         }
-        return StringUtils.left(num, 3).concat(
-                StringUtils.removeStart(
-                        StringUtils.leftPad(StringUtils.right(num, 4), StringUtils.length(num), "*"), X3
-                )
-        );
-
+        return StringUtils.left(num, 3).concat(StringUtils.removeStart(
+                StringUtils.leftPad(StringUtils.right(num, 4), StringUtils.length(num), "*"), X3
+        ));
     }
 
     /**
@@ -105,11 +100,9 @@ public class DesensitizeUtils {
         if (StringUtils.isBlank(cardNum)) {
             return "";
         }
-        return StringUtils.left(cardNum, 6).concat(
-                StringUtils.removeStart(
-                        StringUtils.leftPad(StringUtils.right(cardNum, 4), StringUtils.length(cardNum), "*"), X4
-                )
-        );
+        return StringUtils.left(cardNum, 6).concat(StringUtils.removeStart(
+                StringUtils.leftPad(StringUtils.right(cardNum, 4), StringUtils.length(cardNum), "*"), X4
+        ));
     }
 
 }

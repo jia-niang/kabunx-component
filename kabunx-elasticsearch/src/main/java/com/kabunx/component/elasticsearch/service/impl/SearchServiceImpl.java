@@ -19,10 +19,10 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SearchServiceImpl implements SearchService {
     private final RestHighLevelClient client;
@@ -94,11 +94,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T> List<T> hits2Objects(SearchHit[] hits, Class<T> clazz) {
-        List<T> result = new ArrayList<>();
-        for (SearchHit hit : hits) {
-            String source = hit.getSourceAsString();
-            result.add(JsonUtils.json2Object(source, clazz));
-        }
-        return result;
+        return Arrays.stream(hits)
+                .map(hit -> JsonUtils.json2Object(hit.getSourceAsString(), clazz))
+                .collect(Collectors.toList());
     }
 }
