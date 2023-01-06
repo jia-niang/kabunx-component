@@ -5,6 +5,7 @@ import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.common.context.TraceContext;
 import com.kabunx.component.common.context.TraceContextHolder;
 import com.kabunx.component.common.util.TraceUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TraceHandlerInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                             @NonNull Object handler) throws Exception {
         String platform = request.getHeader(SecurityConstants.HEADER_CLIENT_ID);
         String traceId = request.getHeader(SecurityConstants.HEADER_TRACE_ID);
         TraceUtils.setTraceId(traceId);
@@ -32,7 +34,8 @@ public class TraceHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                @NonNull Object handler, Exception ex) throws Exception {
         TraceContextHolder.removeTrace();
         TraceUtils.removeTraceId();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);

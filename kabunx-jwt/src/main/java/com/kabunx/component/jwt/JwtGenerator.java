@@ -44,11 +44,11 @@ public class JwtGenerator {
         jwtPayload.setAuthorities(authContext.getAuthorities());
         String body = jwtPayload.toPayloadString(jwtConfig.getAccessExpDays());
         try {
-            //创建JWS对象
+            // 创建JWS对象
             JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(body));
-            //创建HMAC签名器
+            // 创建HMAC签名器
             JWSSigner jwsSigner = new MACSigner(MAC_SECRET);
-            //签名
+            // 签名
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         } catch (Exception e) {

@@ -14,7 +14,7 @@ public class ThreadUtils {
         try {
             TimeUnit.MILLISECONDS.sleep(timeout);
         } catch (InterruptedException ex) {
-            log.error("线程中断标记被移除", ex);
+            log.error("[ThreadUtils] 线程中断标记被移除", ex);
         }
     }
 
@@ -22,7 +22,7 @@ public class ThreadUtils {
         try {
             TimeUnit.SECONDS.sleep(timeout);
         } catch (InterruptedException ex) {
-            log.error("线程中断标记被移除", ex);
+            log.error("[ThreadUtils] 线程中断标记被移除", ex);
         }
     }
 

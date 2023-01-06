@@ -39,7 +39,7 @@ public class AdapterLogAspect {
             webLog.setUri(request.getRequestURI());
             webLog.setArgs(joinPoint.getArgs());
             webLog.setSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-            log.info("请求信息：{}", JsonUtils.object2Json(webLog));
+            log.info("[AdapterLog] 请求信息 = {}", JsonUtils.object2Json(webLog));
         }
     }
 
@@ -53,7 +53,7 @@ public class AdapterLogAspect {
         long startTime = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         long endTime = System.currentTimeMillis();
-        log.info("请求耗时：{} ms", (int) (endTime - startTime));
+        log.info("[AdapterLog] 请求耗时 = {} ms", (int) (endTime - startTime));
         return result;
     }
 }

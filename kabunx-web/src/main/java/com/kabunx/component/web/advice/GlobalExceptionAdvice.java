@@ -44,7 +44,7 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public RestResponse<Object> handleValidException(Exception e) {
+    public RestResponse<Object> handleException(Exception e) {
         log.error(e.getMessage());
         return RestResponse.failure("xxx");
     }

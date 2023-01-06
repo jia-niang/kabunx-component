@@ -28,7 +28,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
         return Mono.just(jwtAuthenticationToken)
                 .map(jat -> {
-                    log.info("jwt is {}", jat.getCredentials());
+                    log.info("[Security] jwt is {}", jat.getCredentials());
                     // 有效token才会被解析出来 包含 用户简单信息
                     JwtPayload payload = jwtGenerator.verifyByHMAC((String) jat.getCredentials());
                     if (Objects.nonNull(payload)) {

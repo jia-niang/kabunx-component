@@ -3,6 +3,7 @@ package com.kabunx.component.web.context;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 
 public class SpringContextHolder implements ApplicationContextAware {
     public static final String DEV_PROFILE = "dev";
@@ -14,7 +15,7 @@ public class SpringContextHolder implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
         SpringContextHolder.applicationContext = applicationContext;
     }
 

@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class ResourceAccessDeniedHandler implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
-        log.error("该资源权限受限", denied);
+        log.error("[Security] 该资源权限受限", denied);
         return ResponseUtils.failure(exchange, "该资源权限受限！");
     }
 }

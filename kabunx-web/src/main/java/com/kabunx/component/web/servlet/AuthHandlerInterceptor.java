@@ -3,6 +3,7 @@ package com.kabunx.component.web.servlet;
 import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.common.context.AuthContext;
 import com.kabunx.component.common.context.AuthContextHolder;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,9 @@ import java.util.Objects;
  */
 public class AuthHandlerInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             @NonNull HttpServletResponse response,
+                             @NonNull Object handler) throws Exception {
         String userType = request.getHeader(SecurityConstants.HEADER_AUTH_TYPE);
         String userId = request.getHeader(SecurityConstants.HEADER_AUTH_ID);
         if (Objects.nonNull(userType) && Objects.nonNull(userId)) {
@@ -27,7 +30,9 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NonNull HttpServletRequest request,
+                                @NonNull HttpServletResponse response,
+                                @NonNull Object handler, Exception ex) throws Exception {
         AuthContextHolder.removeCurrentAuth();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }

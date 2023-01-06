@@ -41,7 +41,7 @@ public class JsonUtils {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
-            log.error("序列化异常，object is {}", obj);
+            log.error("[JsonUtils] 序列化异常，object is {}", obj, e);
             throw new JsonException("序列化异常");
         }
     }
@@ -59,7 +59,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, Object.class);
         } catch (Exception e) {
-            log.error("反序列化异常，json is {}", json);
+            log.error("[JsonUtils] 反序列化异常，json is {}", json, e);
             throw new JsonException("反序列化异常");
         }
     }
@@ -71,7 +71,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, tClass);
         } catch (Exception e) {
-            log.error("反序列化异常，json is {}", json);
+            log.error("[JsonUtils] 反序列化异常，json is {}", json, e);
             throw new JsonException("反序列化异常");
         }
     }
@@ -83,7 +83,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(json, typeReference);
         } catch (Exception e) {
-            log.error("反序列化异常，json is {}", json);
+            log.error("[JsonUtils] 反序列化异常，json is {}", json, e);
             throw new JsonException("反序列化异常");
         }
     }
@@ -96,7 +96,7 @@ public class JsonUtils {
             JavaType javaType = getTypeFactory().constructParametricType(List.class, tClass);
             return objectMapper.readValue(json, javaType);
         } catch (Exception e) {
-            log.error("反序列化异常，json is {}", json);
+            log.error("[JsonUtils] 反序列化异常，json is {}", json, e);
             throw new JsonException("反序列化异常");
         }
     }
@@ -109,7 +109,7 @@ public class JsonUtils {
             JavaType javaType = getTypeFactory().constructParametricType(Map.class, kClass, vClass);
             return objectMapper.readValue(json, javaType);
         } catch (Exception e) {
-            log.error("反序列化异常，json is {}", json);
+            log.error("[JsonUtils] 反序列化异常，json is {}", json, e);
             throw new JsonException("反序列化异常");
         }
     }
