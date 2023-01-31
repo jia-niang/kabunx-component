@@ -40,9 +40,9 @@ public class TencentSmsSender implements SmsSender {
         request.setPhoneNumberSet(phoneSet);
         try {
             SendSmsResponse response = client.SendSms(request);
-            log.info("Tencent sms response is {}", response);
+            log.info("[SMS] Tencent sms response is {}", response);
         } catch (TencentCloudSDKException ex) {
-            log.error("腾讯云短信发送失败", ex);
+            log.error("[SMS] 腾讯云短信发送失败", ex);
         }
     }
 

@@ -25,21 +25,27 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
-        return Mono.just(jwtAuthenticationToken)
-                .map(jat -> {
-                    log.info("[Security] jwt is {}", jat.getCredentials());
-                    // 有效token才会被解析出来 包含 用户简单信息
-                    JwtPayload payload = jwtGenerator.verifyByHMAC((String) jat.getCredentials());
-                    if (Objects.nonNull(payload)) {
-                        // 通过用户获取角色或权限
-                        String[] roles = payload.getAuthorities().toArray(new String[0]);
-                        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
-                        Member user = new Member(Long.valueOf(payload.getAud()), payload.getType(), payload.getUsername(), "PASSWORD", authorities);
-                        return new JwtAuthenticationToken(user.getUsername(), jat.getCredentials(), authorities);
-                    } else {
-                        throw new BadCredentialsException("token is invalid");
-                    }
-                });
+        if (authentication.isAuthenticated()) {
+            return Mono.just(authentication);
+        }
+        JwtAuthenticationToken jat = (JwtAuthenticationToken) authentication;
+        log.info("[Security] JWT is {}", jat.getCredentials());
+        // 有效token才会被解析出来 包含 用户简单信息
+        JwtPayload payload = jwtGenerator.verifyByHMAC((String) jat.getCredentials());
+        if (Objects.nonNull(payload)) {
+            // 通过用户获取角色或权限
+            String[] roles = {};
+            if (Objects.nonNull(payload.getAuthorities())) {
+                roles = payload.getAuthorities().toArray(new String[0]);
+            }
+            List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
+            Member user = new Member(Long.valueOf(payload.getAud()), payload.getType(), payload.getUsername(), "PASSWORD", authorities);
+            JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(user.getUsername(), jat.getCredentials(), authorities);
+            authenticationToken.setDetails(user);
+            return Mono.just(authenticationToken);
+        } else {
+            log.error("[Security] JWT : {} is invalid.", jat.getCredentials());
+            throw new BadCredentialsException("JWT is invalid.");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.kabunx.component.security.webflux.authentication;
 
 import com.kabunx.component.common.constant.SecurityConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 /**
  * 将JWT转化为Authentication
  */
+@Slf4j
 public class JwtAuthenticationConverter implements ServerAuthenticationConverter {
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {

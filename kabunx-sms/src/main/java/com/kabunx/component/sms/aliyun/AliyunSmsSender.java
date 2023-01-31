@@ -39,9 +39,9 @@ public class AliyunSmsSender implements SmsSender {
         request.putQueryParameter("putQueryParameter", json);
         try {
             CommonResponse response = client.getCommonResponse(request);
-            log.info("Aliyun sms response data is - {}", response.getData());
+            log.info("[SMS] Aliyun sms response data is - {}", response.getData());
         } catch (ClientException ex) {
-            log.error("阿里云短信发送失败", ex);
+            log.error("[SMS] 阿里云短信发送失败", ex);
         }
     }
 

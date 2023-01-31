@@ -2,6 +2,7 @@ package com.kabunx.component.web.aspect;
 
 import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.web.dto.WebLog;
+import com.kabunx.component.web.util.RequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 统一日志处理切面
  */
-@Aspect
 @Slf4j
+@Aspect
 public class AdapterLogAspect {
     /**
      * execution 代表要执行的表达式主体
@@ -34,12 +35,12 @@ public class AdapterLogAspect {
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
             WebLog webLog = new WebLog();
-            webLog.setIp(request.getRemoteAddr());
+            webLog.setIp(RequestUtils.getClientIp(request));
             webLog.setMethod(request.getMethod());
             webLog.setUri(request.getRequestURI());
             webLog.setArgs(joinPoint.getArgs());
             webLog.setSignature(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-            log.info("[AdapterLog] 请求信息 = {}", JsonUtils.object2Json(webLog));
+            log.info("[AdapterLog] 请求信息 - {}", JsonUtils.object2Json(webLog));
         }
     }
 
@@ -53,7 +54,7 @@ public class AdapterLogAspect {
         long startTime = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         long endTime = System.currentTimeMillis();
-        log.info("[AdapterLog] 请求耗时 = {} ms", (int) (endTime - startTime));
+        log.info("[AdapterLog] 请求耗时 - {} ms", (int) (endTime - startTime));
         return result;
     }
 }

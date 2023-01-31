@@ -1,5 +1,6 @@
 package com.kabunx.component.common.util;
 
+import com.alibaba.ttl.threadpool.TtlExecutors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
@@ -63,17 +64,19 @@ public class ThreadUtils {
     private static final int QUEUE_SIZE = 10000;
 
 
-    // 获取执行CPU密集型任务的线程池
-    public static ThreadPoolExecutor getCpuThreadPoolExecutor() {
-        return CpuThreadPoolLazyHolder.EXECUTOR;
+    /**
+     * 获取执行CPU密集型任务的线程池
+     */
+    public static ExecutorService getCpuThreadPoolExecutor() {
+        return TtlExecutors.getTtlExecutorService(CpuThreadPoolLazyHolder.EXECUTOR);
     }
 
     private static class CpuThreadPoolLazyHolder {
+        static int corePoolSize = (int) (CPU_COUNT * 0.2);
+        static int maxPoolSize = CPU_COUNT + 1;
         private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
-                CPU_COUNT,
-                CPU_COUNT * 2,
-                KEEP_ALIVE_SECONDS,
-                TimeUnit.SECONDS,
+                corePoolSize, maxPoolSize,
+                KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
                 new CustomThreadFactory("CPU")
         );
@@ -83,7 +86,7 @@ public class ThreadUtils {
             // JVM关闭时的钩子函数
             Runtime.getRuntime().addShutdownHook(
                     new ShutdownHookThread<>("CPU密集型任务线程池", (Callable<Void>) () -> {
-                        //优雅关闭线程池
+                        // 优雅关闭线程池
                         shutdownThreadPoolGracefully(EXECUTOR);
                         return null;
                     })
@@ -91,32 +94,30 @@ public class ThreadUtils {
         }
     }
 
-    /**
-     * IO线程池核心线程数
-     */
-    private static final int IO_CORE = 1;
-
     // 获取执行IO密集型任务的线程池
-    public static ThreadPoolExecutor getIoThreadPoolExecutor() {
-        return IoThreadPoolLazyHolder.EXECUTOR;
+    public static ExecutorService getIoThreadPoolExecutor() {
+        return TtlExecutors.getTtlExecutorService(IoThreadPoolLazyHolder.EXECUTOR);
     }
 
     /**
      * 线程池： 用于IO密集型任务
      */
     private static class IoThreadPoolLazyHolder {
+        // 最大线程数 = CPU核心数 / （1 - 阻塞占百分比）
+        static int maxPoolSize = (int) (CPU_COUNT / (1 - 0.8));
+
+        // 核心线程数 = 最大线程数 * 20%
+        static int corePoolSize = (int) (maxPoolSize * 0.2);
         private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
-                IO_CORE,
-                Math.max(10, CPU_COUNT * 2),
-                KEEP_ALIVE_SECONDS,
-                TimeUnit.SECONDS,
+                corePoolSize, maxPoolSize,
+                KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
                 new CustomThreadFactory("IO")
         );
 
         static {
             EXECUTOR.allowCoreThreadTimeOut(true);
-            //JVM关闭时的钩子函数
+            // JVM关闭时的钩子函数
             Runtime.getRuntime().addShutdownHook(
                     new ShutdownHookThread<>("IO密集型任务线程池", (Callable<Void>) () -> {
                         //优雅关闭线程池
@@ -130,23 +131,17 @@ public class ThreadUtils {
     /**
      * 混合线程池
      */
-    private static final int MIXED_CORE = 1;  // 混合线程池核心线程数
-    private static final int MIXED_MAX = 128;  // 最大线程数
-    private static final String MIXED_THREAD_AMOUNT = "mixed.thread.amount";
-
-    /**
-     * 混合线程池
-     */
     public static ThreadPoolExecutor getMixedThreadPoolExecutor() {
         return MixedThreadPoolLazyHolder.EXECUTOR;
     }
 
     private static class MixedThreadPoolLazyHolder {
+        static int MIXED_CORE = 1;  // 混合线程池核心线程数
+        static int MIXED_MAX = 128;  // 最大线程数
+
         static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
-                MIXED_CORE,
-                MIXED_MAX,
-                KEEP_ALIVE_SECONDS,
-                TimeUnit.SECONDS,
+                MIXED_CORE, MIXED_MAX,
+                KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(QUEUE_SIZE),
                 new CustomThreadFactory("MIXED")
         );

@@ -8,7 +8,7 @@
 -- -2 Lua 方法不存在
 
 --eg
--- /usr/local/redis/bin/redis-cli -a  123456 --eval   /vagrant/LuaDemoProject/src/luaScript/module/seckill/second_kill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e  38  demotoken
+-- /usr/local/redis/bin/redis-cli -a  123456 --eval  /vagrant/LuaDemoProject/src/luaScript/module/seckill/seckill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e  38  demotoken
 
 local function setToken(exposedKey, userId, token)
 
@@ -45,7 +45,7 @@ end
 
 
 --eg
--- /usr/local/redis/bin/redis-cli -a  123456 --eval   /vagrant/LuaDemoProject/src/luaScript/module/seckill/second_kill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e 38  demotoken
+-- /usr/local/redis/bin/redis-cli -a  123456 --eval   /vagrant/LuaDemoProject/src/luaScript/module/seckill/seckill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e 38  demotoken
 
 --返回值说明
 --5 排队过了
@@ -61,7 +61,7 @@ local function checkToken(exposedKey, userId, token)
 end
 
 --eg
--- /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/second_kill.lua checkToken  , 1  1  fca9b425-ac48-4c44-9e99-92d18898873c
+-- /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/seckill.lua checkToken  , 1  1  fca9b425-ac48-4c44-9e99-92d18898873c
 
 
 
@@ -70,7 +70,7 @@ local function deleteToken(exposedKey, userId)
     return 1;
 end
 --eg
---  /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/second_kill.lua deleteToken  , 1  1
+--  /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/seckill.lua deleteToken  , 1  1
 
 
 

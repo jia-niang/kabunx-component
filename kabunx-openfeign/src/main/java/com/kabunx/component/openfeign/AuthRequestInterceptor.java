@@ -1,5 +1,6 @@
 package com.kabunx.component.openfeign;
 
+import com.kabunx.component.common.constant.RequestConstants;
 import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.common.context.AuthContext;
 import com.kabunx.component.common.context.AuthContextHolder;
@@ -17,8 +18,8 @@ public class AuthRequestInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         AuthContext authContext = AuthContextHolder.getCurrentAuth();
         if (Objects.nonNull(authContext)) {
-            template.header(SecurityConstants.HEADER_AUTH_TYPE, authContext.getType());
-            template.header(SecurityConstants.HEADER_AUTH_ID, String.valueOf(authContext.getId()));
+            template.header(RequestConstants.HEADER_AUTH_TYPE, authContext.getType());
+            template.header(RequestConstants.HEADER_AUTH_ID, String.valueOf(authContext.getId()));
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.kabunx.component.log.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD})
@@ -7,6 +9,7 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface BizLog {
+
     /**
      * 操作日志的文本模板
      *
@@ -50,9 +53,12 @@ public @interface BizLog {
     String subType() default "";
 
     /**
-     * 记录日志的条件
-     *
-     * @return 条件
+     * 满足条件才会被执行
      */
-    String condition() default "true";
+    String condition() default "";
+
+    /**
+     * 是否启用同步
+     */
+    boolean sync() default false;
 }

@@ -11,19 +11,12 @@ import java.util.Objects;
 
 @Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
+@ConditionalOnClass(JwtGenerator.class)
 public class JwtAutoConfiguration {
 
-    private final SecurityProperties securityProperties;
-
-    public JwtAutoConfiguration(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
-    }
-
-
     @Bean
-    @ConditionalOnClass(JwtGenerator.class)
-    JwtGenerator jwtGenerator() {
-        return new JwtGenerator(jwtConfig(securityProperties.getJwt()));
+    JwtGenerator jwtGenerator(SecurityProperties properties) {
+        return new JwtGenerator(jwtConfig(properties.getJwt()));
     }
 
     private JwtConfig jwtConfig(SecurityProperties.Jwt jwt) {

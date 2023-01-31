@@ -14,15 +14,15 @@ public class LuaScriptHolder {
     /**
      * 秒杀令牌操作的脚本
      */
-    private static final String secondKillLua = "lua/second_kill.lua";
+    private static final String seckillLua = "lua/seckill.lua";
 
-    public static RedisScript<Long> secondKillScript = null;
+    public static RedisScript<Long> seckillScript = null;
 
-    public static synchronized RedisScript<Long> getSecondKillScript() {
-        if (Objects.isNull(secondKillScript)) {
-            secondKillScript = getDefaultRedisScript(secondKillLua);
+    public static synchronized RedisScript<Long> getSeckillScript() {
+        if (Objects.isNull(seckillScript)) {
+            seckillScript = getDefaultRedisScript(seckillLua);
         }
-        return secondKillScript;
+        return seckillScript;
     }
 
 
@@ -60,7 +60,7 @@ public class LuaScriptHolder {
     private static RedisScript<Long> getDefaultRedisScript(String name) {
         String script = IOUtils.loadJarFile(LockServiceImpl.class.getClassLoader(), name);
         if (StringUtils.isEmpty(script)) {
-            log.error("lua script load failed - {}", name);
+            log.error("[LuaScript] lua script load failed - {}", name);
             return null;
         } else {
             return new DefaultRedisScript<>(script, Long.class);

@@ -74,7 +74,7 @@ public class RestResponse<T> {
     public static <T> RestResponse<T> success(T data) {
         RestResponse<T> response = new RestResponse<>();
         response.setSuccess(true);
-        response.setCode("S00000");
+        response.setCode("000000");
         response.setMessage("请求成功");
         response.setData(data);
         return response;

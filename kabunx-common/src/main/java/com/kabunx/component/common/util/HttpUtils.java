@@ -15,9 +15,7 @@ public class HttpUtils {
 
     public static void doGet(String url, Consumer<String> consumer) throws SysException {
         final Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
+                .url(url).get().build();
         consumer.accept(doRequest(request));
     }
 
@@ -26,9 +24,7 @@ public class HttpUtils {
     public static void doPost(String url, String jsonBody, Consumer<String> consumer) throws SysException {
         final RequestBody body = RequestBody.create(jsonType, jsonBody);
         final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+                .url(url).post(body).build();
         consumer.accept(doRequest(request));
     }
 

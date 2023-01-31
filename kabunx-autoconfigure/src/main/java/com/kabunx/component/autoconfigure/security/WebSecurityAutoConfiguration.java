@@ -12,16 +12,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureAfter(JwtAutoConfiguration.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnClass({JwtAuthenticationSuccessHandler.class, RestAuthenticationFailureHandler.class})
 public class WebSecurityAutoConfiguration {
 
     @Bean
-    @ConditionalOnClass(JwtAuthenticationSuccessHandler.class)
     public JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler(JwtGenerator jwtGenerator) {
         return new JwtAuthenticationSuccessHandler(jwtGenerator);
     }
 
     @Bean
-    @ConditionalOnClass(RestAuthenticationFailureHandler.class)
     public RestAuthenticationFailureHandler restAuthenticationFailureHandler() {
         return new RestAuthenticationFailureHandler();
     }

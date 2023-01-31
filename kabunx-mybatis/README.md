@@ -28,7 +28,7 @@ spring:
 
 ## SpringBoot 整合 Druid
 
-Druid 是阿里巴巴开源的一款数据库连接池，结合了C3P0、DBCP 等 DB 池的优点，同时还加入了日志监控。
+Druid 是阿里巴巴开源的一款数据库连接池，结合了 C3P0、DBCP 等 DB 池的优点，同时还加入了日志监控。
 
 Druid 包含了三个重要的组成部分：
 

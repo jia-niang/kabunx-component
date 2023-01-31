@@ -89,8 +89,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 放入安全上下文中
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         } else {
-            log.error("token : {}  is  invalid", token);
-            throw new BadCredentialsException("token is invalid");
+            log.error("[Security] JWT : {} is  invalid.", token);
+            throw new BadCredentialsException("JWT is invalid.");
         }
     }
 }

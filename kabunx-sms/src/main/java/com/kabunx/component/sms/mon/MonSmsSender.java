@@ -36,7 +36,7 @@ public class MonSmsSender implements SmsSender {
                 response.doLog();
             });
         } catch (Exception ex) {
-            log.error("梦网短信发送失败", ex);
+            log.error("[SMS] 梦网短信发送失败", ex);
         }
     }
 

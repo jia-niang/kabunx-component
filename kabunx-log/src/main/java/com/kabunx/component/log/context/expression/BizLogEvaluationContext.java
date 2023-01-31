@@ -17,9 +17,9 @@ import java.util.Map;
 @Slf4j
 public class BizLogEvaluationContext extends MethodBasedEvaluationContext {
 
-    private static final String RESULT = "ret";
+    private static final String RESULT = "result";
 
-    private static final String ERROR_MSG = "eMsg";
+    private static final String ERROR = "error";
 
     public BizLogEvaluationContext(Object rootObject, Method method, Object[] arguments,
                                    ParameterNameDiscoverer parameterNameDiscoverer) {
@@ -41,6 +41,6 @@ public class BizLogEvaluationContext extends MethodBasedEvaluationContext {
     }
 
     public void setErrorMsgVariable(String errorMsg) {
-        setVariable(ERROR_MSG, errorMsg);
+        setVariable(ERROR, errorMsg);
     }
 }

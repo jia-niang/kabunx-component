@@ -26,4 +26,8 @@ public class TimeUtils {
     public static LocalDateTime tomorrow(int hour, int minute, int second) {
         return LocalDateTime.now().plusDays(1L).withHour(hour).withMinute(minute).withSecond(second);
     }
+
+    public static int currentSeconds() {
+        return (int) (System.currentTimeMillis() / 1000);
+    }
 }

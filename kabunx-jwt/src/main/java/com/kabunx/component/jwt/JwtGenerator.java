@@ -33,7 +33,7 @@ public class JwtGenerator {
 
     public String generateByHMAC(AuthContext authContext) {
         if (Objects.isNull(authContext)) {
-            log.error("签名信息不能为Null");
+            log.error("[JWT] JWT 签名信息不能为Null");
         }
         JwtPayload jwtPayload = new JwtPayload();
         jwtPayload.setSub(jwtConfig.getSub());
@@ -52,7 +52,7 @@ public class JwtGenerator {
             jwsObject.sign(jwsSigner);
             return jwsObject.serialize();
         } catch (Exception e) {
-            log.error("JWT生成错误", e);
+            log.error("[JWT] JWT 生成错误", e);
             return null;
         }
     }
@@ -65,14 +65,14 @@ public class JwtGenerator {
             // 创建HMAC验证器
             JWSVerifier jwsVerifier = new MACVerifier(MAC_SECRET);
             if (!jwsObject.verify(jwsVerifier)) {
-                log.error("JWT签名不合法！");
+                log.error("[JWT] JWT 签名不合法！");
                 return null;
             }
             String payload = jwsObject.getPayload().toString();
             JwtPayload jwtPayload = JsonUtils.json2Object(payload, JwtPayload.class);
             return isExpired(jwtPayload.getExp()) ? null : jwtPayload;
         } catch (ParseException | JOSEException e) {
-            log.error("JWT解析异常", e);
+            log.error("[JWT] JWT 解析异常", e);
         }
         return null;
     }

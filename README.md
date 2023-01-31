@@ -2,6 +2,8 @@
 
 本项目主要用于学习，依赖SpringBoot开发框架。
 
+辅助开发包：主要针对开发人员进行技术开发支持，提供一系列通用的开发工具包，定义了基础工具类，如配置、缓存、路由、发号器等工具，减少开发人员重复造轮子，帮助提高代码编写效率。
+
 ### 概述
 
 架构的意义 就是 要素和结构：
@@ -15,8 +17,79 @@
 2. 治理应用复杂度，降低系统熵值；
 3. 从随心所欲的混乱状态，走向井井有条的有序状态。
 
-## 带着问题学习
+## 技术栈
 
-1. 先了解这些技术解决了什么样的问题，为什么这些要使用这些技术作为起始点；
-2. 了解了技术解决了什么问题之后？我们就可以继续深入下去了。如果我们对其中一个技术点感兴趣或者面试需要，那么我们可以查找相关的书籍或者博客了解这个技术点是怎么实现的。
-3. 如果你还想继续深入学习，那么最后应该做的就是“对比性学习”了，不知道大家有没有感触：在大四的时候需要学论文，你会 参考多篇文章，这样进行对比，你对所需要学习的知识就会更加深入的理解。
+* 开发框架：Spring Boot 2.3.12.RELEASE
+* 微服务框架：Spring Cloud Hoxton.SR12、Spring Cloud Alibaba 2.2.7.RELEASE
+* 安全框架：Spring Security + Spring Authorization Server
+* 任务调度：Quartz 、 XXL-JOB
+* 数据库支持: MySQL、Oracle
+* 持久层框架：MyBatis
+* 数据库连接池：Druid
+* 服务注册与发现: Nacos
+* 客户端负载均衡：Spring Cloud Loadbalancer
+* 熔断组件：Hystrix
+* 网关组件：Spring Cloud Gateway
+* 日志管理：Logback
+* 运行容器：Docker
+
+## 模块说明
+
+kabunx
+
+|--- kabunx-autoconfigure
+
+|--- kabunx-common
+
+|--- kabunx-dependencies
+
+|--- kabunx-dev
+
+|--- kabunx-elasticsearch
+
+|--- kabunx-email
+
+|--- kabunx-jwt
+
+|--- kabunx-log
+
+|--- kabunx-mybatis
+
+|--- kabunx-openfeign
+
+|--- kabunx-parent
+
+|--- kabunx-redis
+
+|--- kabunx-security
+
+|--- kabunx-sms
+
+|--- kabunx-starters
+
+|- |--- elasticsearch-spring-boot-starter
+
+|- |--- email-spring-boot-starter
+
+|- |---log-spring-boot-starter
+
+|- |---mybatis-spring-boot-starter
+
+|- |---openfeign-spring-boot-starter
+
+|--- kabunx-validation
+
+|--- kabunx-web
+
+## 技术特色
+
+### 基于 Java 主流开源技术构建
+
+平台基于流行的 J2EE 技术栈，应用稳定的 Spring Cloud 微服务框架进行构建，主流开源的架构给我们带来了以下优势:
+
+* 广泛的业界支持：流行的开源技术都是广泛使用的，是业界默认的标准。
+* 提高开发效率：流行的开源技术会有大量的开发人员提供大量个性的解决方案，能更快速的找到满足需求的各种解决方案。
+* 提高平台的技术稳定性：流行的开源技术已经通过大量的业务场景验证，保证了技术的成熟性，提高了平台和稳定性。
+* 可维护性：流行的开源技术确保了各种社区的活跃度，可以更好的解决平台维护过程中遇到的问题。
+
+### 基于微服务架构设计和扩展

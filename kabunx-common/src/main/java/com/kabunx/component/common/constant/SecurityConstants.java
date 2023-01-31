@@ -42,21 +42,4 @@ public interface SecurityConstants {
      * 微信小程序客户端ID
      */
     String WECHAT_CLIENT_ID = "wechat";
-
-    String HEADER_AUTHORIZATION = "Authorization";
-
-    String HEADER_CLIENT_ID = "X-Client-Id";
-
-    String HEADER_TRACE_ID = "X-Trace-Id";
-
-    /**
-     * 已登录用户类型
-     */
-    String HEADER_AUTH_TYPE = "X-Auth-Type";
-
-    /**
-     * 已登录用户ID
-     */
-    String HEADER_AUTH_ID = "X-Auth-Id";
-
 }

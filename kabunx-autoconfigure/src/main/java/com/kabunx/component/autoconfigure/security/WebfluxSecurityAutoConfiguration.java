@@ -3,8 +3,6 @@ package com.kabunx.component.autoconfigure.security;
 import com.kabunx.component.jwt.JwtGenerator;
 import com.kabunx.component.security.service.ResourceService;
 import com.kabunx.component.security.webflux.JwtAuthenticationEntryPoint;
-import com.kabunx.component.security.webflux.authentication.JwtAuthenticationConverter;
-import com.kabunx.component.security.webflux.authentication.JwtAuthenticationWebFilter;
 import com.kabunx.component.security.webflux.authentication.JwtReactiveAuthenticationManager;
 import com.kabunx.component.security.webflux.authorization.ResourceAuthorizationManager;
 import com.kabunx.component.security.webflux.authorization.ResourceAccessDeniedHandler;
@@ -22,25 +20,13 @@ public class WebfluxSecurityAutoConfiguration {
 
     /**
      * @param jwtGenerator JWT生成器
-     * @return JWT认证管理器
+     * @return JWT过滤管理器
      */
     @Bean
-    @ConditionalOnClass(JwtReactiveAuthenticationManager.class)
     @ConditionalOnBean(JwtGenerator.class)
-    JwtReactiveAuthenticationManager reactiveAuthenticationManager(JwtGenerator jwtGenerator) {
+    @ConditionalOnClass(JwtReactiveAuthenticationManager.class)
+    JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager(JwtGenerator jwtGenerator) {
         return new JwtReactiveAuthenticationManager(jwtGenerator);
-    }
-
-    /**
-     * @param jwtReactiveAuthenticationManager JWT认证管理器
-     * @return JWT过滤器
-     */
-    @Bean
-    @ConditionalOnClass(JwtAuthenticationWebFilter.class)
-    JwtAuthenticationWebFilter jwtAuthenticationWebFilter(JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager) {
-        JwtAuthenticationWebFilter filter = new JwtAuthenticationWebFilter(jwtReactiveAuthenticationManager);
-        filter.setServerAuthenticationConverter(new JwtAuthenticationConverter());
-        return filter;
     }
 
     /**

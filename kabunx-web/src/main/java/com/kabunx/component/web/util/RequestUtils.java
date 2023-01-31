@@ -1,6 +1,7 @@
 package com.kabunx.component.web.util;
 
 import com.kabunx.component.common.constant.GlobalConstants;
+import com.kabunx.component.common.constant.RequestConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestUtils {
     private static final String USER_AGENT_FLAG = "user-agent";
     private static final String[] HEADER_IP_KEYWORDS = {
+            RequestConstants.HEADER_CLIENT_IP,
             "X-Forwarded-For",
             "Proxy-Client-IP",
             "WL-Proxy-Client-IP",

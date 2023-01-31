@@ -21,32 +21,32 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(value = BizException.class)
     public RestResponse<Object> handle(BizException e) {
-        log.error(e.getMessage());
-        return RestResponse.failure(e.getMessage());
+        log.error("[BizException] 业务异常", e);
+        return RestResponse.failure(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(value = HttpMessageConversionException.class)
     public RestResponse<Object> handleValidException(HttpMessageConversionException e) {
-        log.error(e.getMessage());
-        return RestResponse.failure("");
+        log.error("[HttpMessageConversionException] 系统异常", e);
+        return RestResponse.failure("信息序列化异常");
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public RestResponse<Object> handleValidException(MethodArgumentNotValidException e) {
-        log.error(e.getMessage());
+        log.error("[MethodArgumentNotValidException] 系统异常", e);
         return RestResponse.failureWithErrors(getBindingErrors(e.getBindingResult()));
     }
 
     @ExceptionHandler(value = BindException.class)
     public RestResponse<Object> handleValidException(BindException e) {
-        log.error(e.getMessage());
+        log.error("[BindException] 系统异常", e);
         return RestResponse.failureWithErrors(getBindingErrors(e.getBindingResult()));
     }
 
     @ExceptionHandler(value = Exception.class)
     public RestResponse<Object> handleException(Exception e) {
-        log.error(e.getMessage());
-        return RestResponse.failure("xxx");
+        log.error("[Exception] 系统异常", e);
+        return RestResponse.failure("系统异常");
     }
 
     /**

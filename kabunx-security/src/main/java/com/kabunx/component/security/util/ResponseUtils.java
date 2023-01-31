@@ -18,6 +18,7 @@ public class ResponseUtils {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         DataBufferFactory dataBufferFactory = response.bufferFactory();
         DataBuffer buffer = dataBufferFactory.wrap(RestResponse.failure(message).toJsonBytes());
-        return response.writeWith(Mono.just(buffer)).doOnError(error -> DataBufferUtils.release(buffer));
+        return response.writeWith(Mono.just(buffer))
+                .doOnError(error -> DataBufferUtils.release(buffer));
     }
 }

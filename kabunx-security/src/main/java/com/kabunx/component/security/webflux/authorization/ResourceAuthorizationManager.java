@@ -1,7 +1,6 @@
 package com.kabunx.component.security.webflux.authorization;
 
-import com.kabunx.component.common.constant.SecurityConstants;
-import com.kabunx.component.common.util.JsonUtils;
+import com.kabunx.component.common.constant.RequestConstants;
 import com.kabunx.component.security.service.ResourceService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -15,10 +14,7 @@ import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 资源鉴权
@@ -41,19 +37,19 @@ public class ResourceAuthorizationManager implements ReactiveAuthorizationManage
             return Mono.just(new AuthorizationDecision(true));
         }
         // 2. token为空拒绝访问
-        String token = request.getHeaders().getFirst(SecurityConstants.HEADER_AUTHORIZATION);
+        String token = request.getHeaders().getFirst(RequestConstants.HEADER_AUTHORIZATION);
         if (StringUtils.isEmpty(token)) {
             return Mono.just(new AuthorizationDecision(false));
         }
         // 3.缓存取资源权限角色关系列表
-        Map<Object, Object> resources = resourceService.get("");
-        Iterator<Object> iterator = resources.keySet().iterator();
+        Map<String, List<String>> resourceRoles = resourceService.get();
         // 4.请求路径匹配到的资源需要的角色权限集合authorities
         List<String> authorities = new ArrayList<>();
-        while (iterator.hasNext()) {
-            String pattern = (String) iterator.next();
-            if (pathMatcher.match(pattern, path)) {
-                authorities.addAll(getAuthorities((String) resources.get(pattern)));
+        if (Objects.nonNull(resourceRoles)) {
+            for (String pattern : resourceRoles.keySet()) {
+                if (pathMatcher.match(pattern, path)) {
+                    authorities.addAll(resourceRoles.get(pattern));
+                }
             }
         }
         // 5. roleId是请求用户的角色(格式:ROLE_{roleId})，authorities是请求资源所需要角色的集合
@@ -64,9 +60,5 @@ public class ResourceAuthorizationManager implements ReactiveAuthorizationManage
                 .any(authorities::contains)
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
-    }
-
-    private List<String> getAuthorities(String json) {
-        return JsonUtils.json2List(json, String.class);
     }
 }

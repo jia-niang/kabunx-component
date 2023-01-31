@@ -68,12 +68,11 @@ public class BizLogAnnotationParser {
     }
 
     private BizLogExpression buildBizLogExpressionFromAnnotation(BizLog bizLog) {
-        return BizLogExpression.builder()
-                .success(bizLog.success())
-                .error(bizLog.error())
-                .bizNo(bizLog.bizNo())
-                .operator(bizLog.operator())
-                .condition(bizLog.condition())
-                .build();
+        BizLogExpression.Builder builder = new BizLogExpression.Builder();
+        builder.setContent(bizLog.success());
+        builder.setBizNo(bizLog.bizNo());
+        builder.setOperator(bizLog.operator());
+        builder.setCondition(bizLog.condition());
+        return new BizLogExpression(builder);
     }
 }

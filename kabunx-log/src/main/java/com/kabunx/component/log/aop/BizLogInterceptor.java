@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
@@ -67,17 +68,12 @@ public class BizLogInterceptor implements MethodInterceptor {
             // 暂时没有考虑到更好的办法
             BizLogContextHolder.setVariable("auth", AuthContextHolder.getCurrentAuth());
             methodExecute.setContextVariables(BizLogContextHolder.getVariables());
-            ThreadPoolExecutor executor = ThreadUtils.getIoThreadPoolExecutor();
+            ExecutorService executor = ThreadUtils.getIoThreadPoolExecutor();
             executor.execute(() -> {
-                StopWatch stopWatch = new StopWatch(BizLogMonitor.MONITOR_NAME);
-                stopWatch.start(BizLogMonitor.MONITOR_TASK_AFTER_EXECUTE);
                 try {
                     handleBizLogAfterExecute(methodExecute);
                 } catch (Exception ex) {
                     log.error("[BizLog] handle biz log exception", ex);
-                } finally {
-                    stopWatch.stop();
-                    log.info("[BizLog] handle biz log running time = {} ms", stopWatch.getTotalTimeMillis());
                 }
             });
             BizLogContextHolder.clear();
@@ -100,7 +96,7 @@ public class BizLogInterceptor implements MethodInterceptor {
         ExpressionArgs args = bizLogExpressionParser.getExpressionArgs(execute);
         for (BizLogExpression expression : expressions) {
             try {
-                if (StringUtils.isEmpty(expression.getSuccess()) && StringUtils.isEmpty(expression.getError())) {
+                if (StringUtils.isEmpty(expression.getContent())) {
                     continue;
                 }
                 if (checkConditionIsFalse(expression, args)) {
@@ -124,23 +120,17 @@ public class BizLogInterceptor implements MethodInterceptor {
      * 处理成功的模板日志
      */
     private void handleSuccessBizLog(BizLogExpression expression, ExpressionArgs args) {
-        if (StringUtils.isEmpty(expression.getSuccess())) {
+        if (StringUtils.isEmpty(expression.getContent())) {
             return;
         }
-        List<String> spElTemplates = getSpElTemplates(expression, expression.getSuccess());
+        List<String> spElTemplates = getSpElTemplates(expression, expression.getContent());
         String operator = getOperatorAndPutTemplate(expression, spElTemplates);
         Map<String, String> expressionValues = bizLogExpressionParser.doParse(spElTemplates, args);
-        saveLog("success", expression, operator, expression.getSuccess(), expressionValues);
+        saveLog(expression, operator, expression.getContent(), expressionValues);
     }
 
     private void handleErrorBizLog(BizLogExpression expression, ExpressionArgs args) {
-        if (StringUtils.isEmpty(expression.getError())) {
-            return;
-        }
-        List<String> spElTemplates = getSpElTemplates(expression, expression.getError());
-        String operator = getOperatorAndPutTemplate(expression, spElTemplates);
-        Map<String, String> expressionValues = bizLogExpressionParser.doParse(spElTemplates, args);
-        saveLog("error", expression, operator, expression.getError(), expressionValues);
+        log.info("xx");
     }
 
     private boolean checkConditionIsFalse(BizLogExpression expression, ExpressionArgs args) {
@@ -151,7 +141,7 @@ public class BizLogInterceptor implements MethodInterceptor {
         return false;
     }
 
-    private void saveLog(String flag, BizLogExpression expression, String operator,
+    private void saveLog(BizLogExpression expression, String operator,
                          String detail, Map<String, String> expressionValues) {
         if (StringUtils.isEmpty(expressionValues.get(detail))) {
             return;
@@ -168,7 +158,7 @@ public class BizLogInterceptor implements MethodInterceptor {
                 .extra(expressionValues.get(expression.getExtra()))
                 .detail(expressionValues.get(detail))
                 .count(BizLogContextHolder.getCountVariable())
-                .flag(flag)
+                .flag("success")
                 .createTime(new Date())
                 .build();
         // 保存

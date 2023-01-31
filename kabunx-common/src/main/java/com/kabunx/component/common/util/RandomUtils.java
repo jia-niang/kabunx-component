@@ -18,7 +18,7 @@ public class RandomUtils {
      * @param max 最大值
      * @return [1, max]之间的整数
      */
-    public static int inMax(int max) {
+    public static int lteMax(int max) {
         return Math.abs(ThreadLocalRandom.current().nextInt(max)) + 1;
     }
 
@@ -29,7 +29,7 @@ public class RandomUtils {
      * @param max 上限
      * @return [min, max]之间的整数
      */
-    public static int inRange(int min, int max) {
-        return inMax(max - min) + min;
+    public static int range(int min, int max) {
+        return lteMax(max - min) + min;
     }
 }

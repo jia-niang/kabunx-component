@@ -1,12 +1,12 @@
 ## 背景
 
-最近在做微服务的集成，为了解决各服务间的rpc调用问题，使用到了openFeign，
-虽然是简单地在springboot项目中集成openFeign，但是里面其实还是有很多需要注意的点，
+最近在做微服务的集成，为了解决各服务间的 rpc 调用问题，使用到了 openFeign，
+虽然是简单地在 springboot 项目中集成 openFeign，但是里面其实还是有很多需要注意的点，
 下面就依次列举出来。
 
-### 使用openfeign
+### 使用 openfeign
 
-依赖引入后，我们需要使用openFeign的功能，首先需要在启动类上添加@EnableFeignClients注解；
+依赖引入后，我们需要使用 openFeign 的功能，首先需要在启动类上添加 @EnableFeignClients 注解；
 
 ### 连接池
 
@@ -15,8 +15,8 @@
 
 #### 添加依赖
 
-我们打算把HttpURLConnection实现替换成okhttp的实现
-<!-- 替换默认的HttpURLConnection，改为okhttp，并添加链接池-->
+我们打算把 HttpURLConnection 实现替换成 okhttp 的实现
+<!-- 替换默认的 HttpURLConnection，改为 okhttp，并添加链接池-->
 
 ```xml
 
@@ -26,7 +26,7 @@
 </dependency>
 ```
 
-通过javaConfig的方式把okhttp的实现引入进来
+通过 javaConfig 的方式把 okhttp 的实现引入进来
 
 更改配置
 
@@ -50,11 +50,11 @@ feign:
     keep-alive-duration: 15000
 ```
 
-这样我们就把openFeign的请求发送改造成链接池了，避免了每次请求都创建HttpURLConnection对象；
+这样我们就把 openFeign 的请求发送改造成链接池了，避免了每次请求都创建 HttpURLConnection 对象；
 
 #### 开启请求压缩功能
 
-为了更好地减少请求发送的时间，我们可以针对请求数据进行压缩处理，openFeign也内置了压缩功能，不过需要我们自己开启：
+为了更好地减少请求发送的时间，我们可以针对请求数据进行压缩处理，openFeign 也内置了压缩功能，不过需要我们自己开启：
 
 ```yaml
 feign:
@@ -70,7 +70,7 @@ feign:
 
 #### 配置超时时间
 
-我们还可以给指定的FeignClient指定对应的超时时间，因为并不是所有的服务超时时间都是统一的，有些特殊的业务场景需要针对性地设置超时时间：
+我们还可以给指定的 FeignClient 指定对应的超时时间，因为并不是所有的服务超时时间都是统一的，有些特殊的业务场景需要针对性地设置超时时间：
 
 ```yaml
 feign:
@@ -79,19 +79,19 @@ feign:
       # 设置超时，囊括了okhttp的超时，okhttp属于真正执行的超时，openFeign属于服务间的超时
       # 设置全局超时时间
       default:
-        connectTimeout: 2000
-        readTimeout: 5000
+        connect-timeout: 2000
+        read-timeout: 5000
         # 针对特定contextId设置超时时间
-      ucServer:
-        connectTimeout: 1000
-        readTimeout: 2000
+      uc-server:
+        connect-timeout: 1000
+        read-timeout: 2000
 ```
 
 ### LoadBalancer简介
 
-LoadBalancer是Spring Cloud官方提供的负载均衡组件，可用于替代Ribbon。其使用方式与Ribbon基本兼容，可以从Ribbon进行平滑过渡。
+LoadBalancer 是 Spring Cloud 官方提供的负载均衡组件，可用于替代 Ribbon。其使用方式与 Ribbon 基本兼容，可以从Ribbon进行平滑过渡。
 
-LoadBalancer为了提高性能，不会在每次请求时去获取实例列表，而是将服务实例列表进行了本地缓存。
+LoadBalancer 为了提高性能，不会在每次请求时去获取实例列表，而是将服务实例列表进行了本地缓存。
 
 默认的缓存时间为35s，为了减少服务不可用还会被选择的可能性，我们可以进行如下配置。
 
@@ -116,7 +116,7 @@ spring:
 ### Hystrix
 
 在微服务架构中，服务与服务之间通过远程调用的方式进行通信，一旦某个被调用的服务发生了故障，其依赖服务也会发生故障，此时就会发生故障的蔓延，最终导致系统瘫痪。Hystrix实现了断路器模式，当某个服务发生故障时，通过断路器的监控，给调用方返回一个错误响应，而不是长时间的等待，这样就不会使得调用方由于长时间得不到响应而占用线程，从而防止故障的蔓延。
-Hystrix具备服务降级、服务熔断、线程隔离、请求缓存、请求合并及服务监控等强大功能。
+Hystrix 具备服务降级、服务熔断、线程隔离、请求缓存、请求合并及服务监控等强大功能。
 
 #### Hystrix 状态
 
@@ -134,7 +134,7 @@ Hystrix 旨在执行以下操作：
 
 #### 如何使用
 
-低版本的 OpenFeign默认引入了Hystrix包，主需要配置就可以开启了：
+低版本的 OpenFeign 默认引入了 Hystrix 包，主需要配置就可以开启了：
 
 ```yaml
 feign:
@@ -147,10 +147,10 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5000
+            timeout-in-milliseconds: 5000
 ```
 
-在配置Feign 客户端配置Hystrix时，可以指定fallback或者fallbackFactory。
+在配置 Feign 客户端配置 Hystrix 时，可以指定 fallback 或者 fallbackFactory。
 
 #### 方式1 直接实现Feign 客户端接口
 
@@ -164,9 +164,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 
 #### 方式2 实现FallbackFactory 接口
 
-还通过实现FallbackFactory接口，指定泛型为Feign 接口，然后实现其方法。使用工厂类，可以获取到当前发生的异常信息。
+还通过实现 FallbackFactory 接口，指定泛型为Feign 接口，然后实现其方法。使用工厂类，可以获取到当前发生的异常信息。
 
-然后配置下fallbackFactory属性就可以了。
+然后配置下 fallbackFactory 属性就可以了。
 
 ```java
 import org.springframework.cloud.openfeign.FeignClient;

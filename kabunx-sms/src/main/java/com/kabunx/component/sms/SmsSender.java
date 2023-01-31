@@ -8,5 +8,4 @@ public interface SmsSender {
 
     void doSend(SendSmsEvent sendSmsEvent);
 
-
 }

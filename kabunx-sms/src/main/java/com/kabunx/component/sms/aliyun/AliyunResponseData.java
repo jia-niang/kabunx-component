@@ -17,7 +17,7 @@ public class AliyunResponseData implements Serializable {
     @JsonProperty("Code")
     private String code;
 
-    public boolean success() {
+    public boolean ok() {
         return "OK".equals(code);
     }
 }

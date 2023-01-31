@@ -48,9 +48,9 @@ public class MonResponse implements Serializable {
 
     public void doLog() {
         if (success()) {
-            log.info("Mon sms msgId is {}, msg is {}", msgid, getMessage());
+            log.info("[SMS] Mon sms msgId is {}, msg is {}", msgid, getMessage());
         } else {
-            log.error("Mon sms msgId is {}, msg is {}", msgid, getMessage());
+            log.error("[SMS] Mon sms msgId is {}, msg is {}", msgid, getMessage());
         }
     }
 }
