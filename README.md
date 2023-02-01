@@ -139,19 +139,19 @@ kabunx
 
 各个包结构的简要功能描述，如下表所示：
 
-| 层次         | 包名           | 功能                         | 必选  |
-|------------|--------------|----------------------------|-----|
-| Adapter层   | web          | 处理页面请求的Controller          | 否   |
-| Adapter层   | wap          | 处理wap端的适配	                 | 否   |
-| App层       | service      | 处理request，包括command和query	 | 是   |
-| App层       | runner       | 处理定时任务	                    | 否   |
-| Domain层    | model	       | 领域模型	                      | 是   |
-| Domain层    | gateway      | 领域网关，解耦利器	                 | 是   |
-| Infra层     | gateway.impl | 网关实现	                      | 是   |
-| Infra层     | mapper       | ibatis数据库映射	               | 否   |
-| Infra层     | config       | 配置信息	                      | 否   |
-| Client SDK | api          | 服务对外透出的API	                | 是   |
-| Client SDK | dto	         | 服务对外的DTO	                  | 是   |
+| 层次         | 包名           | 功能                             | 必选  |
+|------------|--------------|--------------------------------|-----|
+| Adapter 层  | web          | 处理页面请求的 Controller             | 否   |
+| Adapter 层  | wap          | 处理 wap 端的适配	                   | 否   |
+| App 层      | service      | 处理 request，包括 command 和 query	 | 是   |
+| App 层      | runner       | 处理定时任务	                        | 否   |
+| Domain 层   | model	       | 领域模型	                          | 是   |
+| Domain 层   | gateway      | 领域网关，解耦利器	                     | 是   |
+| Infra 层    | gateway.impl | 网关实现	                          | 是   |
+| Infra 层    | mapper       | ibatis 数据库映射	                  | 否   |
+| Infra 层    | config       | 配置信息	                          | 否   |
+| Client SDK | api          | 服务对外透出的 API	                   | 是   |
+| Client SDK | dto	         | 服务对外的 DTO	                     | 是   |
 
 ### 解耦
 
@@ -163,7 +163,7 @@ kabunx
 
 在COLA中，我们把AC这个概念进行了泛化，将数据库、搜索引擎等数据存储都列为外部依赖的范畴。利用依赖倒置，统一使用gateway来实现业务领域和外部依赖的解耦。
 
-## CQRS概述
+## CQRS 概述
 
 CQRS是Command and Query Responsibility Segregation（命令查询职责分离）的缩写。
 
