@@ -1,7 +1,7 @@
 package com.kabunx.component.autoconfigure.openfeign;
 
 import com.kabunx.component.openfeign.AuthRequestInterceptor;
-import com.kabunx.component.openfeign.TraceIdRequestInterceptor;
+import com.kabunx.component.openfeign.TraceRequestInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ public class OpenfeignAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(TraceIdRequestInterceptor.class)
-    TraceIdRequestInterceptor traceRequestInterceptor() {
-        return new TraceIdRequestInterceptor();
+    @ConditionalOnClass(TraceRequestInterceptor.class)
+    TraceRequestInterceptor traceRequestInterceptor() {
+        return new TraceRequestInterceptor();
     }
 }

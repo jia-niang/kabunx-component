@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 全局配置,内部链路数据
  */
-public class TraceIdRequestInterceptor implements RequestInterceptor {
+public class TraceRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
