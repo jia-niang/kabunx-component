@@ -37,6 +37,7 @@
         <module>kabunx-email</module>
         <module>kabunx-log</module>
         <module>kabunx-cache</module>
+        <module>kabunx-saas</module>
     </modules>
 
     <!-- Most elements are in profiles, so they are stripped out during maven-flatten -->

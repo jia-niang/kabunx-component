@@ -24,49 +24,43 @@
 
 kabunx
 
-|--- kabunx-autoconfigure - 是实现自动配置的核心工程。
+|—— kabunx-autoconfigure - 是实现自动配置的核心工程。
 
-|--- kabunx-common - 基础通用包
+|—— kabunx-cache - 二级缓存相关
 
-|--- kabunx-dependencies - 依赖版本
+|—— kabunx-common - 基础通用包
 
-|--- kabunx-dev - 本地开发相关
+|—— kabunx-dependencies - 依赖版本
 
-|--- kabunx-elasticsearch - ES相关
+|—— kabunx-dev - 本地开发相关
 
-|--- kabunx-email - 邮件相关
+|—— kabunx-elasticsearch - ES相关
 
-|--- kabunx-jwt - JWT相关
+|—— kabunx-email - 邮件相关
 
-|--- kabunx-log - 业务日志相关
+|—— kabunx-jwt - JWT相关
 
-|--- kabunx-mybatis - mybatis 的进一步封装
+|—— kabunx-log - 业务日志相关
 
-|--- kabunx-openfeign - 依赖相关
+|—— kabunx-mybatis - Mybatis 相关的进一步封装
 
-|--- kabunx-parent - parent 工程依赖
+|—— kabunx-openfeign - 依赖相关
 
-|--- kabunx-redis - redis 的进一步封装
+|—— kabunx-parent - Parent 工程依赖
 
-|--- kabunx-security - security 的进一步封装
+|—— kabunx-redis - Redis 的进一步封装
 
-|--- kabunx-sms - 短信相关
+|—— kabunx-sass - SaaS 多数据源相关
 
-|--- kabunx-validation - 常用参数验证器
+|—— kabunx-security - Security 的进一步封装
 
-|--- kabunx-web - web 的进一步封装
+|—— kabunx-sms - 短信相关
 
-|--- kabunx-starters
+|—— kabunx-validation - 常用参数验证器
 
-|--- |--- elasticsearch-spring-boot-starter
+|—— kabunx-web - Web 的进一步封装
 
-|--- |--- email-spring-boot-starter
-
-|--- |--- log-spring-boot-starter
-
-|--- |--- mybatis-spring-boot-starter
-
-|--- |--- openfeign-spring-boot-starter
+|—— kabunx-starters 自定义启动器
 
 ## 技术特色
 

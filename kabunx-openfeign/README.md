@@ -1,7 +1,7 @@
 ## 背景
 
-最近在做微服务的集成，为了解决各服务间的 rpc 调用问题，使用到了 openFeign，
-虽然是简单地在 springboot 项目中集成 openFeign，但是里面其实还是有很多需要注意的点，
+最近在做微服务的集成，为了解决各服务间的 rpc 调用问题，使用到了 openfeign，
+虽然是简单地在 springboot 项目中集成 openfeign，但是里面其实还是有很多需要注意的点，
 下面就依次列举出来。
 
 ### 使用 openfeign
@@ -10,8 +10,8 @@
 
 ### 连接池
 
-默认的情况下，openFeign使用的上是HttpURLConnection发起请求，具体代码可查看feign.Client.Default类实现，
-也就是说，openFeign每次需要创建一个新的请求，而不是使用的链接池，所以我们的需要替换掉这个默认的实现，改用一个有链接池的实现
+默认的情况下，openfeign 使用的上是 HttpURLConnection 发起请求，具体代码可查看 feign.Client.Default 类实现，
+也就是说，openfeign 每次需要创建一个新的请求，而不是使用的链接池，所以我们的需要替换掉这个默认的实现，改用一个有链接池的实现
 
 #### 添加依赖
 
@@ -50,11 +50,11 @@ feign:
     keep-alive-duration: 15000
 ```
 
-这样我们就把 openFeign 的请求发送改造成链接池了，避免了每次请求都创建 HttpURLConnection 对象；
+这样我们就把 openfeign 的请求发送改造成链接池了，避免了每次请求都创建 HttpURLConnection 对象；
 
 #### 开启请求压缩功能
 
-为了更好地减少请求发送的时间，我们可以针对请求数据进行压缩处理，openFeign 也内置了压缩功能，不过需要我们自己开启：
+为了更好地减少请求发送的时间，我们可以针对请求数据进行压缩处理，openfeign 也内置了压缩功能，不过需要我们自己开启：
 
 ```yaml
 feign:
@@ -89,7 +89,7 @@ feign:
 
 ### LoadBalancer简介
 
-LoadBalancer 是 Spring Cloud 官方提供的负载均衡组件，可用于替代 Ribbon。其使用方式与 Ribbon 基本兼容，可以从Ribbon进行平滑过渡。
+LoadBalancer 是 Spring Cloud 官方提供的负载均衡组件，可用于替代 Ribbon。其使用方式与 Ribbon 基本兼容，可以从 Ribbon 进行平滑过渡。
 
 LoadBalancer 为了提高性能，不会在每次请求时去获取实例列表，而是将服务实例列表进行了本地缓存。
 
@@ -134,7 +134,7 @@ Hystrix 旨在执行以下操作：
 
 #### 如何使用
 
-低版本的 OpenFeign 默认引入了 Hystrix 包，主需要配置就可以开启了：
+低版本的 openfeign 默认引入了 Hystrix 包，主需要配置就可以开启了：
 
 ```yaml
 feign:
@@ -154,7 +154,7 @@ hystrix:
 
 #### 方式1 直接实现Feign 客户端接口
 
-然后在@FeignClient中指定fallback属性为上面的类即可。
+然后在 @FeignClient 中指定 fallback 属性为上面的类即可。
 
 ```java
 import org.springframework.cloud.openfeign.FeignClient;
