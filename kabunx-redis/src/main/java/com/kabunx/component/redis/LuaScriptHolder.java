@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.script.RedisScript;
 
 import java.util.Objects;
 
+/**
+ * Lua脚本
+ */
 @Slf4j
 public class LuaScriptHolder {
     /**

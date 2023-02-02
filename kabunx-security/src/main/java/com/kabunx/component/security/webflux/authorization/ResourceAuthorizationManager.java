@@ -41,9 +41,9 @@ public class ResourceAuthorizationManager implements ReactiveAuthorizationManage
         if (StringUtils.isEmpty(token)) {
             return Mono.just(new AuthorizationDecision(false));
         }
-        // 3.缓存取资源权限角色关系列表
+        // 3. 缓存取资源权限角色关系列表
         Map<String, List<String>> resourceRoles = resourceService.get();
-        // 4.请求路径匹配到的资源需要的角色权限集合authorities
+        // 4. 请求路径匹配到的资源需要的角色权限集合authorities
         List<String> authorities = new ArrayList<>();
         if (Objects.nonNull(resourceRoles)) {
             for (String pattern : resourceRoles.keySet()) {

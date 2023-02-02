@@ -13,18 +13,12 @@ import com.kabunx.component.redis.service.impl.RedisServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -48,39 +42,6 @@ public class RedisAutoConfiguration {
         redisTemplate.setHashValueSerializer(jsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
-    }
-
-    @Primary
-    @Bean("hotCache")
-    @ConditionalOnBean(RedisConnectionFactory.class)
-    CacheManager hotCacheManager(RedisConnectionFactory factory) {
-        // 配置序列化
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-                .prefixCacheNameWith("cache:hot:")
-                .entryTtl(Duration.ofMinutes(5L))
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer()))
-                .disableCachingNullValues();
-
-        return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
-                .cacheDefaults(configuration)
-                .build();
-    }
-
-    @Bean("lazyCache")
-    @ConditionalOnBean(RedisConnectionFactory.class)
-    CacheManager lazyCacheManager(RedisConnectionFactory factory) {
-        // 配置序列化
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-                .prefixCacheNameWith("cache:lazy:")
-                .entryTtl(Duration.ofDays(7L))
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer()))
-                .disableCachingNullValues();
-
-        return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
-                .cacheDefaults(configuration)
-                .build();
     }
 
     @Bean
