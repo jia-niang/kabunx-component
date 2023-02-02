@@ -1,8 +1,8 @@
-## Redis解决了什么问题？
+## Redis 解决了什么问题？
 
 大规模读写数据与数据库读写能力之间的矛盾
 
-简单回顾一下CPU高速缓存的发展历程，为了解决 CPU
+简单回顾一下 CPU 高速缓存的发展历程，为了解决 CPU
 的计算速度与内存的读取速度之间的巨大差异，CPU 使用高速缓存来存放指令和数据。高速缓存从最初的主板缓存到现在的3级缓存，缓存大小也不断变大。来自网络的数据表明：CPU
 高速缓存的命中率大约为80%。
 
@@ -25,19 +25,19 @@ Redis 用作缓存，我们知道 Redis 的作者设计 Redis 的初衷是因为
 
 ### 为什么使用 redis？
 
-分析:博主觉得在项目中使用 Redis，主要是从两个角度去考虑:
-性能和并发。当然，Redis 还具备可以做分布式锁等其他功能，但是如果只是为了分布式锁这些其他功能，完全还有其他中间件(
-如 ZooKeeper 等)代替，并不是非要使用redis。因此，这个问题主要从性能和并发两个角度去答。
+分析：在项目中使用 redis，主要是从两个角度去考虑: 性能和并发。
 
-回答:如下所示，分为两点:
+当然，Redis 还具备可以做分布式锁等其他功能，但是如果只是为了分布式锁这些其他功能，完全还有其他中间件(
+如 ZooKeeper 等)代替，并不是非要使用 redis。因此，这个问题主要从性能和并发两个角度去答。
 
 （一）性能
 
-我们在碰到需要执行耗时特别久，且结果不频繁变动的SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。
+我们在碰到需要执行耗时特别久，且结果不频繁变动的 SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。
 
 （二）并发
 
-在大并发的情况下，所有的请求直接访问数据库，数据库会出现连接异常。这个时候，就需要使用redis做一个缓冲操作，让请求先访问到redis，而不是直接访问数据库。
+在大并发的情况下，所有的请求直接访问数据库，数据库会出现连接异常。这个时候，就需要使用 redis 做一个缓冲操作，让请求先访问到
+redis，而不是直接访问数据库。
 
 ## SpringBoot 整合 Redis
 
@@ -104,21 +104,22 @@ spring:
 相关依赖
 
 ```xml
+
 <dependencies>
-   <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-redis</artifactId>
-      <exclusions>
-         <exclusion>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-         </exclusion>
-      </exclusions>
-   </dependency>
-   <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-   </dependency>
+    <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-redis</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>io.lettuce</groupId>
+                <artifactId>lettuce-core</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+    </dependency>
 </dependencies>
 
 ```
@@ -133,3 +134,5 @@ spring:
         min-idle: 0 # 连接池最小空闲连接数
         max-wait: -1 # 连接池最大阻塞等待时间，负值表示没有限制
 ```
+
+## 补充
