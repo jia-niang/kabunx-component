@@ -22,7 +22,7 @@
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
-        <caffeine.version>3.1.2</caffeine.version>
+        <caffeine.version>2.9.3</caffeine.version>
         <alibaba-ttl.version>2.14.0</alibaba-ttl.version>
         <alibaba-easyexcel.version>3.1.1</alibaba-easyexcel.version>
         <mysql.version>8.0.25</mysql.version>

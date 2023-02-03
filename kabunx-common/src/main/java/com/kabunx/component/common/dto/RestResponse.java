@@ -5,6 +5,7 @@ import com.kabunx.component.common.exception.ErrorInfo;
 import com.kabunx.component.common.util.JsonUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * @param <T> 泛型数据
  */
 @Schema(title = "REST风格返回体")
-public class RestResponse<T> {
+public class RestResponse<T> implements Serializable {
     @Schema(title = "是否成功", required = true)
     private boolean success;
 
