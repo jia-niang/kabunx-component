@@ -3,7 +3,6 @@ package com.kabunx.component.autoconfigure.web;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kabunx.component.web.aop.RestControllerExceptionHandler;
-import com.kabunx.component.web.aop.AdapterLogHandler;
 import com.kabunx.component.web.context.SpringContextHolder;
 import com.kabunx.component.web.servlet.error.APIErrorController;
 import org.springframework.beans.factory.ObjectProvider;
@@ -30,15 +29,6 @@ public class WebAutoConfiguration {
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
-    }
-
-    /**
-     * @return 适配层日志拦截器
-     */
-    @Bean
-    @ConditionalOnClass(AdapterLogHandler.class)
-    public AdapterLogHandler adapterLogAspect() {
-        return new AdapterLogHandler();
     }
 
     @Bean
