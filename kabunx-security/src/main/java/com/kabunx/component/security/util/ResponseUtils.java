@@ -1,6 +1,6 @@
 package com.kabunx.component.security.util;
 
-import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.dto.APIResponse;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -17,7 +17,7 @@ public class ResponseUtils {
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         DataBufferFactory dataBufferFactory = response.bufferFactory();
-        DataBuffer buffer = dataBufferFactory.wrap(RestResponse.failure(message).toJsonBytes());
+        DataBuffer buffer = dataBufferFactory.wrap(APIResponse.failure(message).toJsonBytes());
         return response.writeWith(Mono.just(buffer))
                 .doOnError(error -> DataBufferUtils.release(buffer));
     }

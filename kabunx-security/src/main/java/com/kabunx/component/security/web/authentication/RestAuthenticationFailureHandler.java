@@ -1,6 +1,6 @@
 package com.kabunx.component.security.web.authentication;
 
-import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.dto.APIResponse;
 import com.kabunx.component.common.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -28,7 +28,7 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(
-                JsonUtils.object2Json(RestResponse.failure("认证失败，请核实授权信息！"))
+                JsonUtils.object2Json(APIResponse.failure("认证失败，请核实授权信息！"))
         );
     }
 }

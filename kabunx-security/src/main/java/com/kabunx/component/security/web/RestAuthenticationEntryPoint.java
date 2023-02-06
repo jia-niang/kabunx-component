@@ -1,6 +1,6 @@
 package com.kabunx.component.security.web;
 
-import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.dto.APIResponse;
 import com.kabunx.component.common.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -29,7 +29,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(
-                JsonUtils.object2Json(RestResponse.failure("认证失败，请先登录！"))
+                JsonUtils.object2Json(APIResponse.failure("认证失败，请先登录！"))
         );
     }
 }

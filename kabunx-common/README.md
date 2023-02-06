@@ -7,7 +7,7 @@
 * DO（Data Object）：此对象与数据库表结构一一对应，通过 DAO 层向上传输数据源对象。
 * DTO（Data Transfer Object）：数据传输对象，Service 或 Manager 向外传输的对象。
 * BO（Business Object）：业务对象，可以由 Service 层输出的封装业务逻辑的对象。
-* Query：数据查询对象，各层接收上层的查询请求。注意超过 2 个参数的查询封装，禁止使用 Map 类 来传输。
+* Query：数据查询对象，各层接收上层的查询请求。注意超过 2 个参数的查询封装，禁止使用 Map 类来传输。
 * VO（View Object）：显示层对象，通常是 Web 向模板渲染引擎层传输的对象。
 
 分包没有对错之分，下面采用的分包方式与阿里巴巴 Java 开发手册中定义的规范略有不同。
@@ -18,11 +18,11 @@
 * Event : 用于接收前端传递的事件参数
 * Query : 用于接收前端传递查询参数
 * PageQuery : 用于接收前端传递的分页查询参数
-* RestResponse : 统一响应的数据格式（Json格式）
+* APIResponse : 统一响应的数据格式（Json格式）
 * Pagination : 用于定义向前端返回的分页数据
 * SimplePagination : 用于定义向前端返回的简单分页数据
 * Resource : 用于定义向前端返回的资源信息
-* OptionResource : 特定的可选资源信息
+* OptionResource : 特定的选项资源信息
 
 ## TTL
 

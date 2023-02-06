@@ -2,7 +2,7 @@ package com.kabunx.component.security.web.authentication;
 
 import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.common.context.AuthContext;
-import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.dto.APIResponse;
 import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.jwt.JwtGenerator;
 import com.kabunx.component.security.userdetails.Member;
@@ -48,11 +48,11 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         String token = jwtGenerator.generateByHMAC(authContext);
         if (StringUtils.isEmpty(token)) {
             response.getWriter().print(
-                    JsonUtils.object2Json(RestResponse.failure("JWT生成错误"))
+                    JsonUtils.object2Json(APIResponse.failure("JWT生成错误"))
             );
         } else {
             response.getWriter().print(
-                    JsonUtils.object2Json(RestResponse.success(
+                    JsonUtils.object2Json(APIResponse.success(
                             SecurityConstants.AUTHENTICATION_PREFIX + token)
                     )
             );

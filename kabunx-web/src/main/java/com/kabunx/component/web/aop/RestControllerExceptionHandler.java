@@ -1,6 +1,6 @@
-package com.kabunx.component.web.advice;
+package com.kabunx.component.web.aop;
 
-import com.kabunx.component.common.dto.RestResponse;
+import com.kabunx.component.common.dto.APIResponse;
 import com.kabunx.component.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -10,44 +10,47 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.HandlerMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionAdvice {
+public class RestControllerExceptionHandler {
 
     @ExceptionHandler(value = BizException.class)
-    public RestResponse<Object> handle(BizException e) {
-        log.error("[BizException] 业务异常", e);
-        return RestResponse.failure(e.getCode(), e.getMessage());
+    public APIResponse<Object> handle(BizException ex) {
+        log.error("[BizException] 业务异常", ex);
+        return APIResponse.failure(ex.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(value = HttpMessageConversionException.class)
-    public RestResponse<Object> handleValidException(HttpMessageConversionException e) {
-        log.error("[HttpMessageConversionException] 系统异常", e);
-        return RestResponse.failure("信息序列化异常");
+    public APIResponse<Object> handleValidException(HttpMessageConversionException ex) {
+        log.error("[HttpMessageConversionException] 系统序列化异常", ex);
+        return APIResponse.failure("信息序列化异常");
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public RestResponse<Object> handleValidException(MethodArgumentNotValidException e) {
-        log.error("[MethodArgumentNotValidException] 系统异常", e);
-        return RestResponse.failureWithErrors(getBindingErrors(e.getBindingResult()));
+    public APIResponse<Object> handleValidException(MethodArgumentNotValidException ex) {
+        log.error("[MethodArgumentNotValidException] 参数异常", ex);
+        return APIResponse.failureWithErrors(getBindingErrors(ex.getBindingResult()));
     }
 
     @ExceptionHandler(value = BindException.class)
-    public RestResponse<Object> handleValidException(BindException e) {
-        log.error("[BindException] 系统异常", e);
-        return RestResponse.failureWithErrors(getBindingErrors(e.getBindingResult()));
+    public APIResponse<Object> handleValidException(BindException ex) {
+        log.error("[BindException] 参数异常", ex);
+        return APIResponse.failureWithErrors(getBindingErrors(ex.getBindingResult()));
     }
 
-    @ExceptionHandler(value = Exception.class)
-    public RestResponse<Object> handleException(Exception e) {
-        log.error("[Exception] 系统异常", e);
-        return RestResponse.failure("系统异常");
+    @ExceptionHandler
+    public APIResponse<Object> handleException(HttpServletRequest request, HandlerMethod method, Exception ex) {
+        log.error("[Exception] 访问 {} -> {} 出现系统异常", request.getRequestURI(), method.toString(), ex);
+        return APIResponse.failure("服务器忙，请稍后再试");
     }
+
 
     /**
      * 错误信息收集

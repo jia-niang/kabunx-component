@@ -1,4 +1,4 @@
-package com.kabunx.component.web.aspect;
+package com.kabunx.component.web.aop;
 
 import com.kabunx.component.common.util.JsonUtils;
 import com.kabunx.component.web.dto.WebLog;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Aspect
-public class AdapterLogAspect {
+public class AdapterLogHandler {
     /**
      * execution 代表要执行的表达式主体
      * 第一处 * 的位置代表方法返回的类型， * 表示返回所有类型
