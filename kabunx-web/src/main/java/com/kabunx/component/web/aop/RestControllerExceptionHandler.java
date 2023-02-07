@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 最上层异常处理（兜底方案）
+ */
 @Slf4j
 @RestControllerAdvice
 public class RestControllerExceptionHandler {

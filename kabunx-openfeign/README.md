@@ -6,7 +6,7 @@
 
 ### 使用 openfeign
 
-依赖引入后，我们需要使用 openFeign 的功能，首先需要在启动类上添加 @EnableFeignClients 注解；
+依赖引入后，我们需要使用 openfeign 的功能，首先需要在启动类上添加 @EnableFeignClients 注解；
 
 ### 连接池
 
@@ -152,7 +152,7 @@ hystrix:
 
 在配置 Feign 客户端配置 Hystrix 时，可以指定 fallback 或者 fallbackFactory。
 
-#### 方式1 直接实现Feign 客户端接口
+#### 方式1 直接实现 Feign 客户端接口
 
 然后在 @FeignClient 中指定 fallback 属性为上面的类即可。
 
@@ -162,9 +162,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 @FeignClient(name = "x", fallback = "")
 ```
 
-#### 方式2 实现FallbackFactory 接口
+#### 方式2 实现 FallbackFactory 接口
 
-还通过实现 FallbackFactory 接口，指定泛型为Feign 接口，然后实现其方法。使用工厂类，可以获取到当前发生的异常信息。
+还通过实现 FallbackFactory 接口，指定泛型为 Feign 接口，然后实现其方法。使用工厂类，可以获取到当前发生的异常信息。
 
 然后配置下 fallbackFactory 属性就可以了。
 

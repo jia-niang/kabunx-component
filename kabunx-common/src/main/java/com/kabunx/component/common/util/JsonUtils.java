@@ -18,25 +18,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * json序列化与反序列工具类
+ * JSON 序列化与反序列工具类
  */
 @Slf4j
 public class JsonUtils {
     /**
-     * ObjectMapper提供了读取和写入JSON的功能
+     * ObjectMapper 提供了读取和写入 JSON 的功能
      */
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         // 不存在的属性，不转化，否则报错
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // LocalDateTime序列化和反序列化
+        // LocalDateTime 序列化和反序列化
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         objectMapper.registerModule(javaTimeModule);
     }
 
+    /**
+     * 对象转化为 JSON 字符串
+     *
+     * @param obj 目标对象
+     * @return JSON 字符串
+     * @throws JsonException 序列化异常
+     */
     public static String object2Json(Object obj) throws JsonException {
         try {
             return objectMapper.writeValueAsString(obj);
@@ -55,6 +62,12 @@ public class JsonUtils {
         return objectMapper.getTypeFactory();
     }
 
+    /**
+     * JSON 字符串转化为对象
+     *
+     * @param json JSON 字符串
+     * @return 对象
+     */
     public static Object json2Object(String json) {
         try {
             return objectMapper.readValue(json, Object.class);
@@ -65,7 +78,7 @@ public class JsonUtils {
     }
 
     /**
-     * 将JSON字符串反序列化为对象
+     * JSON 字符串反序列化为对象
      */
     public static <T> T json2Object(String json, Class<T> tClass) throws JsonException {
         try {
@@ -77,7 +90,7 @@ public class JsonUtils {
     }
 
     /**
-     * 将JSON字符串转换为复杂类型的对象
+     * JSON 字符串转换为复杂类型的对象
      */
     public static <T> T json2Object(String json, TypeReference<T> typeReference) throws JsonException {
         try {
@@ -89,7 +102,7 @@ public class JsonUtils {
     }
 
     /**
-     * 将JSON字符串转换为list对象
+     * 将 JSON 字符串转换为 List 对象
      */
     public static <T> List<T> json2List(String json, Class<T> tClass) throws JsonException {
         try {
@@ -102,7 +115,7 @@ public class JsonUtils {
     }
 
     /**
-     * 将JSON字符串转换为Map对象
+     * 将 JSON 字符串转换为 Map 对象
      */
     public static <K, V> Map<K, V> json2Map(String json, Class<K> kClass, Class<V> vClass) throws JsonException {
         try {

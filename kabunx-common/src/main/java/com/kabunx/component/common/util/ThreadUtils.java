@@ -8,6 +8,10 @@ import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 线程工具类
+ * 所有线程池，均被 TTL 处理
+ */
 @Slf4j
 public class ThreadUtils {
 
@@ -49,7 +53,7 @@ public class ThreadUtils {
     }
 
     /**
-     * CPU核数
+     * CPU 核数
      **/
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
 
@@ -59,13 +63,13 @@ public class ThreadUtils {
     private static final int KEEP_ALIVE_SECONDS = 30;
 
     /**
-     * 有界队列size
+     * 有界队列大小
      */
     private static final int QUEUE_SIZE = 10000;
 
 
     /**
-     * 获取执行CPU密集型任务的线程池
+     * 获取执行 CPU 密集型任务的线程池
      */
     public static ExecutorService getCpuThreadPoolExecutor() {
         return TtlExecutors.getTtlExecutorService(CpuThreadPoolLazyHolder.EXECUTOR);
@@ -83,9 +87,9 @@ public class ThreadUtils {
 
         static {
             EXECUTOR.allowCoreThreadTimeOut(true);
-            // JVM关闭时的钩子函数
+            // JVM关 闭时的钩子函数
             Runtime.getRuntime().addShutdownHook(
-                    new ShutdownHookThread<>("CPU密集型任务线程池", (Callable<Void>) () -> {
+                    new ShutdownHookThread<>("CPU 密集型任务线程池", (Callable<Void>) () -> {
                         // 优雅关闭线程池
                         shutdownThreadPoolGracefully(EXECUTOR);
                         return null;

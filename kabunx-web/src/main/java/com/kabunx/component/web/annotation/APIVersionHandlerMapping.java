@@ -11,6 +11,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+/**
+ * API 版本号处理
+ */
 public class APIVersionHandlerMapping extends RequestMappingHandlerMapping {
 
     @Override

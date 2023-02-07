@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
 
+/**
+ * 通用获取 Spring 上下文的工具类
+ */
 public class SpringContextHolder implements ApplicationContextAware {
     public static final String DEV_PROFILE = "dev";
     public static final String TEST_PROFILE = "test";
