@@ -1,6 +1,6 @@
-## Java术语（PO/POJO/VO/BO/DAO/DTO）
+## Java 术语（PO/POJO/VO/BO/DAO/DTO）
 
-最近在写代码的时候，对于Entity、VO、DTO、BO的概念有些混淆，不太了解具体的用途以及作用，所以想梳理一下。
+最近在写代码的时候，对于 Entity、VO、DTO、BO 的概念有些混淆，不太了解具体的用途以及作用，所以想梳理一下。
 
 阿里巴巴 Java 开发手册中的分层领域模型规约：
 
@@ -28,7 +28,8 @@
 
 ### 需求场景
 
-ThreadLocal的需求场景即TransmittableThreadLocal的潜在需求场景，如果你的业务需要『在使用线程池等会池化复用线程的执行组件情况下传递ThreadLocal值』则是TransmittableThreadLocal目标场景。
+ThreadLocal 的需求场景即 TransmittableThreadLocal 的潜在需求场景，如果你的业务需要『在使用线程池等会池化复用线程的执行组件情况下传递
+ThreadLocal 值』则是 TransmittableThreadLocal 目标场景。
 
 #### 1. 分布式跟踪系统
 
@@ -38,7 +39,7 @@ ThreadLocal的需求场景即TransmittableThreadLocal的潜在需求场景，如
 
 由于不限制用户应用使用线程池，系统的上下文需要能跨线程的传递，且不影响应用代码。
 
-#### 3.应用容器或上层框架跨应用代码给下层SDK传递信息
+#### 3.应用容器或上层框架跨应用代码给下层 SDK 传递信息
 
 应用代码会使用线程池，并且这样的使用是正常的业务需求。上下文信息需要传递到下层 SDK，要支持这样的用法。
 
@@ -64,8 +65,7 @@ ThreadLocal的需求场景即TransmittableThreadLocal的潜在需求场景，如
 
 ### JavaBean 的困扰
 
-数据传输对象(Data Transfer Objects, DTO)
-经常被用于这些应用中。DTO只是持有另一个对象中被请求的信息的对象。通常情况下，这些信息是有限的一部分。例如，在持久化层定义的实体和发往客户端的DTO之间经常会出现相互之间的转换。由于DTO是原始对象的反映，因此这些类之间的映射器在转换过程中扮演着关键角色。
+在开发的时候我看到业务代码之间有很多的 JavaBean 之间的相互转化， 非常的影响观感，却又不得不存在。
 
 ### MapStruct 带来的改变
 
@@ -74,7 +74,5 @@ MapStruct 是一个生成类型安全， 高性能且无依赖的 JavaBean 映�
 * 注解处理器
 * 可以生成 JavaBean 之间那的映射代码
 * 类型安全， 高性能， 无依赖性
-
-### MapStruct 入门
 
 
