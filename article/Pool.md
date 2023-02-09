@@ -127,12 +127,7 @@ public class FaultDateFormat {
 import java.text.SimpleDateFormat;
 
 public class GoodDateFormat {
-    ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };
+    ThreadLocal<SimpleDateFormat> format = ThreadLocal.withInitial(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 }
 ```
 
@@ -182,6 +177,4 @@ Java 中实现线程同步的方式有很多，大体可以分为以下 8 类。
 异步是一种编程模型，它通过将耗时的操作转移到后台线程运行，从而减少对主业务的堵塞，所以我们说异步让速度变快了。但如果你的系统资源使用已经到了极限，异步就不能产生任何效果了，它主要优化的是那些阻塞性的等待。
 
 异步还能够对业务进行解耦，它比较像是生产者消费者模型。主线程负责生产任务，并将它存放在待执行列表中；消费线程池负责任务的消费，进行真正的业务逻辑处理。
-
-
 

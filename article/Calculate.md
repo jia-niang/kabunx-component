@@ -14,7 +14,8 @@ Java 提供了非常丰富的 API，来支持多线程开发。对我们 Java �
 public class ParallelFetcher {
     final long timeout;
     final CountDownLatch latch;
-    final ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 200, 1, TimeUnit.HOURS, new ArrayBlockingQueue<>(100));
+    final ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 200, 1,
+            TimeUnit.HOURS, new ArrayBlockingQueue<>(100));
 
     public ParallelFetcher(int jobSize, long timeoutMill) {
         latch = new CountDownLatch(jobSize);
@@ -49,12 +50,13 @@ public class ParallelFetcher {
 
 ```java
 public class Parallel {
-    public static void main(String[] args){
-        ParallelFetcher fetcher = new ParallelFetcher(20,50);
+    public static void main(String[] args) {
+        ParallelFetcher fetcher = new ParallelFetcher(20, 50);
+        // ConcurrentHashMap
         final Map<String, String> result = new HashMap<>();
-        fetcher.submitJob(()->{
+        fetcher.submitJob(() -> {
             // 你要执行调用
-            result.put("f1","123");
+            result.put("f1", "123");
         });
         fetcher.await();
         fetcher.dispose();

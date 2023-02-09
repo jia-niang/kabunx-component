@@ -89,7 +89,7 @@ public class BenchmarkTest {
         return a;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Options opts = new OptionsBuilder()
                 .include(BenchmarkTest.class.getSimpleName())
                 .resultFormat(ResultFormatType.JSON)
