@@ -142,6 +142,18 @@ feign:
     enabled: true
 # 设置hystrix超时时间（如果不配置默认为1000毫秒）
 hystrix:
+  # 线程池
+  threadpool: 
+    default:
+      coreSize: 10  # 核心线程数
+      maximumSize: 10  最大线程数
+      allowMaximumSizeToDivergeFromCoreSize: true   # 是否允许动态调整,必须为true才能让maximumSize生效
+      keepAliveTimeMinutes: 1   # 非核心线程空闲多久后释放,单位 分钟
+      maxQueueSize: -1  # 等待队列最大总容量,默认-1为无等待队列而不是无限容量
+      queueSizeRejectionThreshold: 5  # 等待队列运行时的最大容量,maxQueueSize不为-1才生效
+    feignClientName: # 自定义的
+      coreSize: 20
+      maximumSize: 50
   command:
     default:
       execution:
@@ -160,6 +172,9 @@ hystrix:
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(name = "x", fallback = "")
+public class FeignClientTest {
+
+}
 ```
 
 #### 方式2 实现 FallbackFactory 接口
@@ -172,4 +187,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(name = "x", fallbackFactory = "")
+public class FeignClientTest {
+    
+}
 ```

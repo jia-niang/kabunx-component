@@ -3,7 +3,10 @@ Java 提供了非常丰富的 API，来支持多线程开发。对我们 Java �
 ## 并行获取数据
 
 实际场景：一个聚合接口，要求在 100ms 内返回数据。它的调用逻辑非常复杂，打交道的接口也非常多，需要从 20 多个接口汇总数据。
-这些接口，最小的耗时也要 20ms，哪怕全部都是最优状态，算下来也需要 20*20 = 400ms。
+这些接口，最小的耗时也要 20ms，哪怕全部都是最优状态，算下来也需要 20 * 20 = 400ms。
+
+## 并行加载的实现方式
+
 
 这个时候，我们就可以使用 CountDownLatch 完成操作。CountDownLatch 本质上是一个计数器，我们把它初始化为与执行任务相同的数量。当一个任务执行完时，就将计数器的值减
 1，直到计数器值达到 0 时，表示完成了所有的任务，在 await 上等待的线程就可以继续执行下去。
@@ -76,8 +79,6 @@ HashMap 类，它并不是线程安全的，在并发执行时发生了错乱，
 20 个线程，200 个线程就可以支持 10 个并发量，按照最悲观的 50ms 来算的话，这个接口支持的最小 QPS 就是：1000/50*
 10=200。这就是说，如果访问量增加，这个线程数还可以调大。
 
-在我们的平常的业务中，有计算密集型任务和 I/O 密集型任务之分。
-
 ### I/O 密集型任务
 
 对于我们常见的互联网服务来说，大多数是属于 I/O 密集型的，比如等待数据库的 I/O，等待网络 I/O 等。在这种情况下，当线程数量等于
@@ -91,3 +92,81 @@ CPU 数量，是效率最高的。
 了解了任务的这些特点，就可以通过调整线程数量增加服务性能。比如，高性能的网络工具包 Netty，EventLoop 默认的线程数量，就是处理器的
 2 倍。
 
+
+
+
+## 异步 CompletableFuture
+
+### CompletableFuture 解决的问题
+
+CompletableFuture 是由 Java8 引入的，在 Java8 之前我们一般通过 Future 实现异步。
+
+* Future 用于表示异步计算的结果，只能通过阻塞或者轮询的方式获取结果，而且不支持设置回调方法，回调的引入又会导致臭名昭著的回调地狱。
+* CompletableFuture 对 Future 进行了扩展，可以通过设置回调的方式处理计算结果，同时也支持组合操作，支持进一步的编排，同时一定程度解决了回调地狱的问题。
+
+### 代码执行在哪个线程上？
+
+要合理治理线程资源，最基本的前提条件就是要在写代码时，清楚地知道每一行代码都将执行在哪个线程上。
+
+异步方法（即带 Async 后缀的方法）：可以选择是否传递线程池参数 Executor 运行在指定线程池中；当不传递 Executor 时，会使用
+ForkJoinPool 中的共用线程池 CommonPool（CommonPool 的大小是 CPU 核数-1，如果是 IO 密集的应用，线程数可能成为瓶颈）。
+
+例如：
+
+```java
+public class AsyncCompletableFuture {
+    public static void main(String[] args) {
+        ExecutorService threadPool1 = new ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100));
+        CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("supplyAsync 执行线程：" + Thread.currentThread().getName());
+            // 业务操作
+            return "";
+        }, threadPool1);
+        // 此时，如果 future1 中的业务操作已经执行完毕并返回，则该 thenApply 直接由当前 main 线程执行；
+        // 否则，将会由执行以上业务操作的 threadPool1 中的线程执行。
+        future1.thenApply(value -> {
+            System.out.println("thenApply 执行线程：" + Thread.currentThread().getName());
+            return value + "1";
+        });
+        // 使用 ForkJoinPool 中的共用线程池 CommonPool
+        future1.thenApplyAsync(value -> {
+            return value + "1";
+        });
+        // 使用指定线程池
+        future1.thenApplyAsync(value -> {
+            return value + "1";
+        }, threadPool1);
+    }
+}
+```
+
+#### 异步回调要传线程池
+
+异步回调方法可以选择是否传递线程池参数 Executor，这里我们建议强制传线程池，且根据实际情况做线程池隔离。
+
+#### 线程池循环引用会导致死锁
+
+```java
+
+public class Test {
+
+    public Object doGet() {
+        ExecutorService threadPool1 = new ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(100));
+        CompletableFuture cf1 = CompletableFuture.supplyAsync(() -> {
+            // do sth
+            return CompletableFuture.supplyAsync(() -> {
+                System.out.println("child");
+                return "child";
+            }, threadPool1).join();// 子任务
+        }, threadPool1);
+
+        return cf1.join();
+    }
+}
+```
+
+如上代码块所示，doGet 方法第三行通过 supplyAsync 向 threadPool1 请求线程，并且内部子任务又向 threadPool1 请求线程。threadPool1
+大小为10，当同一时刻有10个请求到达，则 threadPool1 被打满，子任务请求线程时进入阻塞队列排队，但是父任务的完成又依赖于子任务，这时由于子任务得不到线程，父任务无法完成。主线程执行
+cf1.join() 进入阻塞状态，并且永远无法恢复。
+
+为了修复该问题，需要将父任务与子任务做线程池隔离，两个任务请求不同的线程池，避免循环依赖导致的阻塞。
