@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class JwtPayload {
@@ -31,10 +30,6 @@ public class JwtPayload {
      * 签发时间
      **/
     private final LocalDateTime iat = LocalDateTime.now();
-    /**
-     * 唯一身份标识，主要用来作为一次性token,从而回避重放攻击
-     **/
-    private final String jti = UUID.randomUUID().toString();
 
     /**
      * 用户类型

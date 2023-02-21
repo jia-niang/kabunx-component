@@ -8,7 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class RequestUtils {
+public class ServletRequestUtils {
 
     public static <T> T getBodyObject(final HttpServletRequest request, Class<T> tClass) {
         String body = getBodyString(request);

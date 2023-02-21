@@ -1,6 +1,5 @@
 package com.kabunx.component.log.annotation;
 
-import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 

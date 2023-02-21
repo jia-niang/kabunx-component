@@ -4,7 +4,7 @@ import com.kabunx.component.common.constant.SecurityConstants;
 import com.kabunx.component.jwt.JwtGenerator;
 import com.kabunx.component.jwt.JwtPayload;
 import com.kabunx.component.security.userdetails.Member;
-import com.kabunx.component.security.web.RestAuthenticationEntryPoint;
+import com.kabunx.component.security.web.ServletAuthenticationEntryPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     /**
      * 认证如果失败由该端点进行响应
      */
-    private final AuthenticationEntryPoint authenticationEntryPoint = new RestAuthenticationEntryPoint();
+    private final AuthenticationEntryPoint authenticationEntryPoint = new ServletAuthenticationEntryPoint();
 
     public JwtAuthenticationFilter(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;

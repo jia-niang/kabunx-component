@@ -1,11 +1,11 @@
-package com.kabunx.component.security.web;
+package com.kabunx.component.security.web.access;
 
 import com.kabunx.component.common.dto.APIResponse;
 import com.kabunx.component.common.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,23 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 认证失败入口点
- * 当用户访问需要认证接口时，认证失败的处理逻辑
- */
 @Slf4j
-public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class ServletAccessDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
         if (response.isCommitted()) {
             log.warn("响应已经提交");
             return;
         }
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(
-                JsonUtils.object2Json(APIResponse.failure("认证失败，请先登录！"))
+                JsonUtils.object2Json(APIResponse.failure("权限受限"))
         );
     }
 }

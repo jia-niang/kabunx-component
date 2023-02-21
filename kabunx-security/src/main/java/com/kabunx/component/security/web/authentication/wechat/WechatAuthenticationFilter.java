@@ -1,7 +1,7 @@
 package com.kabunx.component.security.web.authentication.wechat;
 
 import com.kabunx.component.security.dto.WechatRequest;
-import com.kabunx.component.security.util.RequestUtils;
+import com.kabunx.component.security.util.ServletRequestUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -30,7 +30,7 @@ public class WechatAuthenticationFilter extends AbstractAuthenticationProcessing
         if (!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-        WechatRequest wechatRequest = RequestUtils.getBodyObject(request, WechatRequest.class);
+        WechatRequest wechatRequest = ServletRequestUtils.getBodyObject(request, WechatRequest.class);
         WechatAuthenticationToken authRequest = new WechatAuthenticationToken(
                 wechatRequest.getCode(), wechatRequest.getCode(), wechatRequest.getData()
         );

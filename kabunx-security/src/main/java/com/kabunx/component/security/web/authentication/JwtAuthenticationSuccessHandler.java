@@ -46,7 +46,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         Member member = (Member) authentication.getPrincipal();
         AuthContext authContext = getAuthContext(member, authentication.getAuthorities());
         String token = jwtGenerator.generateByHMAC(authContext);
-        if (StringUtils.isEmpty(token)) {
+        if (StringUtils.hasText(token)) {
             response.getWriter().print(
                     JsonUtils.object2Json(APIResponse.failure("JWT生成错误"))
             );

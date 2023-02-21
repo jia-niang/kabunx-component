@@ -1,7 +1,7 @@
 package com.kabunx.component.security.web.authentication.captcha;
 
 import com.kabunx.component.security.dto.CaptchaRequest;
-import com.kabunx.component.security.util.RequestUtils;
+import com.kabunx.component.security.util.ServletRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ public class CaptchaAuthenticationFilter extends AbstractAuthenticationProcessin
         if (!request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-        CaptchaRequest captchaRequest = RequestUtils.getBodyObject(request, CaptchaRequest.class);
+        CaptchaRequest captchaRequest = ServletRequestUtils.getBodyObject(request, CaptchaRequest.class);
         CaptchaAuthenticationToken authRequest = new CaptchaAuthenticationToken(
                 captchaRequest.getPhone(), captchaRequest.getCaptcha(), captchaRequest.getType()
         );

@@ -10,7 +10,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-public class ResponseUtils {
+public class ServerResponseUtils {
 
     public static <T> Mono<Void> failure(ServerWebExchange exchange, String message) {
         ServerHttpResponse response = exchange.getResponse();

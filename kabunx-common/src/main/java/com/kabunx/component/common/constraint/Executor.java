@@ -3,10 +3,11 @@ package com.kabunx.component.common.constraint;
 /**
  * 复杂服务业务组合使用
  *
- * @param <T> 接收参数
+ * @param <R> 返回数据
+ * @param <P> 接收参数
  */
-public interface Executor<T> {
+public interface Executor<R, P> {
 
-    Boolean exec(T object);
+    R exec(P object);
 }
 
