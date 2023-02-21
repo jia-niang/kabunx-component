@@ -1,4 +1,4 @@
-package com.kabunx.component.common.constraint;
+package com.kabunx.component.common;
 
 /**
  * 复杂服务业务组合使用

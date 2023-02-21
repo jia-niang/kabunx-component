@@ -1,6 +1,8 @@
 package com.kabunx.component.saas.aop;
 
 
+import com.kabunx.component.common.exception.BizException;
+import com.kabunx.component.saas.SaaSErrorInfo;
 import com.kabunx.component.saas.annotation.DataSource;
 import com.kabunx.component.saas.context.DataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.util.StringUtils;
 
 /**
  * 数据库切面
@@ -25,8 +28,15 @@ public class DataSourceAspect {
     @Around("dataSourceMethod() && @annotation(dataSource)")
     public Object doAround(ProceedingJoinPoint joinPoint, DataSource dataSource) throws Throwable {
         String dataSourceKey = DataSourceContextHolder.getDataSourceKey();
-
         String tmpDataSourceKey = dataSource.key();
+        if (!StringUtils.hasText(tmpDataSourceKey)) {
+            log.error("[SaaS] 注解未定义数据源");
+            throw new BizException(SaaSErrorInfo.DATASOURCE_UNDEFINED);
+        }
+        if (!DataSourceContextHolder.containDataSourceKey(tmpDataSourceKey)) {
+            log.error("[SaaS] 数据源不存在");
+            throw new BizException(SaaSErrorInfo.DATASOURCE_NOT_FOUND);
+        }
         DataSourceContextHolder.setDataSourceKey(tmpDataSourceKey);
         try {
             return joinPoint.proceed();
