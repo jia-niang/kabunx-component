@@ -22,12 +22,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
+        <!-- Optional -->
         <dependency>
             <groupId>com.kabunx.component</groupId>
             <artifactId>kabunx-web</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- Optional -->
         <dependency>
             <groupId>com.kabunx.component</groupId>
             <artifactId>kabunx-log</artifactId>
@@ -41,6 +41,11 @@
         <dependency>
             <groupId>com.kabunx.component</groupId>
             <artifactId>kabunx-security</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.kabunx.component</groupId>
+            <artifactId>kabunx-saas</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

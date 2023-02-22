@@ -8,9 +8,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface DataSource {
+public @interface DS {
     @AliasFor("key")
     String value() default "";
 
+    @AliasFor("name")
     String key() default "";
 }

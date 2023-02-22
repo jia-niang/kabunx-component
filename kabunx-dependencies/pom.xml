@@ -27,6 +27,7 @@
         <alibaba-easyexcel.version>3.1.1</alibaba-easyexcel.version>
         <mysql.version>8.0.25</mysql.version>
         <mybatis.version>3.5.11</mybatis.version>
+        <mybatis-spring.version>2.1.0</mybatis-spring.version>
         <mybatis-spring-starter.version>2.3.0</mybatis-spring-starter.version>
         <p6spy.version>3.9.1</p6spy.version>
         <mybatis-generator.version>1.4.1</mybatis-generator.version>
@@ -97,6 +98,11 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>

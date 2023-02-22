@@ -3,7 +3,7 @@ package com.kabunx.component.common.constant.enums;
 /**
  * 认证身份标识枚举
  */
-public enum AuthenticationIdentityEnum implements BaseEnum<String> {
+public enum AuthenticationIdentity implements EnumInfo<String> {
     USERNAME("username", "用户名"),
     MOBILE("captcha", "验证码"),
     WECHAT("wechat", "微信"),
@@ -13,7 +13,7 @@ public enum AuthenticationIdentityEnum implements BaseEnum<String> {
 
     private final String label;
 
-    AuthenticationIdentityEnum(String value, String label) {
+    AuthenticationIdentity(String value, String label) {
         this.value = value;
         this.label = label;
     }

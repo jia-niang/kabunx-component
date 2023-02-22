@@ -5,7 +5,7 @@ package com.kabunx.component.common.constant.enums;
  *
  * @param <T>
  */
-public interface BaseEnum<T> {
+public interface EnumInfo<T> {
 
     T getValue();
 

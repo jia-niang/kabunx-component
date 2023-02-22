@@ -7,10 +7,10 @@ import com.kabunx.component.mybatis.example.Example;
 import com.kabunx.component.mybatis.exception.ModelException;
 import com.kabunx.component.mybatis.exception.ModelNotFoundException;
 import com.kabunx.component.mybatis.exception.MultipleRecordsFoundException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -138,10 +138,10 @@ public interface CurdRepository<E, C extends Example> {
         if (total == 0) {
             return new Pagination<>(page.getPage(), total, null);
         }
-        if (StringUtils.isEmpty(example.getOrderByClause())) {
-            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
-        } else {
+        if (StringUtils.hasText(example.getOrderByClause())) {
             example.setOrderByClause(example.getOrderByClause() + " limit " + page.from() + ", " + page.getPageSize());
+        } else {
+            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
         }
         List<E> entities = findAllByExample(example);
         return new Pagination<>(page.getPage(), total, entities);
@@ -155,10 +155,10 @@ public interface CurdRepository<E, C extends Example> {
      * @return 简单分页数据
      */
     default SimplePagination<E> simplePaginate(C example, Page page) {
-        if (StringUtils.isEmpty(example.getOrderByClause())) {
-            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
-        } else {
+        if (StringUtils.hasText(example.getOrderByClause())) {
             example.setOrderByClause(example.getOrderByClause() + " limit " + page.from() + ", " + page.morePageSize());
+        } else {
+            example.setOrderByClause("id limit " + page.from() + ", " + page.getPageSize());
         }
         List<E> entities = findAllByExample(example);
         SimplePagination<E> simplePagination = new SimplePagination<>();

@@ -3,7 +3,7 @@ package com.kabunx.component.saas.aop;
 
 import com.kabunx.component.common.exception.BizException;
 import com.kabunx.component.saas.SaaSErrorInfo;
-import com.kabunx.component.saas.annotation.DataSource;
+import com.kabunx.component.saas.annotation.DS;
 import com.kabunx.component.saas.context.DataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,18 +17,18 @@ import org.springframework.util.StringUtils;
  */
 @Slf4j
 @Aspect
-public class DataSourceAspect {
+public class DSAspect {
     // 创建切点
-    @Pointcut("@annotation(com.kabunx.component.saas.annotation.DataSource)")
+    @Pointcut("@annotation(com.kabunx.component.saas.annotation.DS)")
     public void dataSourceMethod() {
     }
 
     // 在切点前后执行方法，通过 @annotation(dynamicDataSource) 绑定注解到第二个参数
     // ProceedingJoinPoint 必须要放在第一个参数
-    @Around("dataSourceMethod() && @annotation(dataSource)")
-    public Object doAround(ProceedingJoinPoint joinPoint, DataSource dataSource) throws Throwable {
+    @Around("dataSourceMethod() && @annotation(DS)")
+    public Object switchDataSource(ProceedingJoinPoint joinPoint, DS DS) throws Throwable {
         String dataSourceKey = DataSourceContextHolder.getDataSourceKey();
-        String tmpDataSourceKey = dataSource.key();
+        String tmpDataSourceKey = DS.key();
         if (!StringUtils.hasText(tmpDataSourceKey)) {
             log.error("[SaaS] 注解未定义数据源");
             throw new BizException(SaaSErrorInfo.DATASOURCE_UNDEFINED);

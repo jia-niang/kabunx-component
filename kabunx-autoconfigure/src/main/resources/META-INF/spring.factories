@@ -2,6 +2,7 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.kabunx.component.autoconfigure.web.WebAutoConfiguration,\
   com.kabunx.component.autoconfigure.web.InterceptorAutoConfiguration,\
+   com.kabunx.component.autoconfigure.saas.DynamicDataSourceAutoConfiguration,\
   com.kabunx.component.autoconfigure.log.BizLogAutoConfiguration,\
   com.kabunx.component.autoconfigure.openfeign.OpenfeignAutoConfiguration,\
   com.kabunx.component.autoconfigure.security.JwtAutoConfiguration,\

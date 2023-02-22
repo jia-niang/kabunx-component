@@ -1,20 +1,18 @@
 package com.kabunx.component.common.constant.enums;
 
-public enum MenuTypeEnum implements BaseEnum<Integer> {
-
-    NULL(0, null),
-    MENU(1, "菜单"),
-    CATALOG(2, "目录");
+public enum Gender implements EnumInfo<Integer> {
+    UNKNOWN(0, "保密"),
+    MALE(1, "男"),
+    FEMALE(2, "女");
 
     private final Integer value;
 
     private final String label;
 
-    MenuTypeEnum(Integer value, String label) {
+    Gender(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
-
 
     @Override
     public Integer getValue() {
